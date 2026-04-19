@@ -2,8 +2,6 @@
 
 Oktatási célú, szándékosan sérülékeny Spring Boot webalkalmazás. Minden modul két módban futtatható — **Vulnerable** és **Secure** — így szemmel látható a különbség a védelem nélküli és a megfelelően védett kód között.
 
-> ⚠️ **FIGYELEM:** Ez az alkalmazás **szándékosan sérülékeny**. Soha ne telepítsd publikus szerverre, csak lokális tanulási környezetben futtasd.
-
 ---
 
 ## Mit demonstrál?
