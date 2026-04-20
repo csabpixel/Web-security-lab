@@ -1,6 +1,6 @@
 # Web Security Lab
 
-Oktatási célú, szándékosan sérülékeny Spring Boot webalkalmazás. Minden modul két módban futtatható — **Vulnerable** és **Secure** — így szemmel látható a különbség a védelem nélküli és a megfelelően védett kód között.
+Oktatási célú, sérülékeny Spring Boot webalkalmazás. Minden modul két módban futtatható — **Vulnerable** és **Secure** — így szemmel látható a különbség a védelem nélküli és a megfelelően védett kód között.
 
 ---
 
