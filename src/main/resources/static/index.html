@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Security Oktató Demó</title>
+    <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body>
+<div class="app-shell">
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-mark">WS</div>
+            <div>
+                <h1>Vulnerability</h1>
+            </div>
+        </div>
+
+        <nav class="main-nav">
+            <button class="main-tab active" data-main-tab="sqliSection">SQL Injection</button>
+            <button class="main-tab" data-main-tab="xssSection">XSS</button>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        <!-- SQLI -->
+        <section id="sqliSection" class="main-section active">
+            <div class="subnav-wrap">
+                <div class="subnav-title">SQL Injection modul</div>
+                <nav class="sub-nav">
+                    <button class="sub-tab active" data-sub-tab="sqliDemo">SQL Injection</button>
+                    <button class="sub-tab" data-sub-tab="blindContentSection">Blind SQLi - Content based</button>
+                    <button class="sub-tab" data-sub-tab="blindTimeSection">Blind SQLi - Time based</button>
+                </nav>
+            </div>
+
+            <!-- BASIC SQLI -->
+            <section id="sqliDemo" class="sub-section active">
+                <div class="hero-card">
+                    <div>
+                        <h2>SQL Injection</h2>
+                        <p>Hasonlítsd össze a sérülékeny és a biztonságos lekérdezéskezelést.</p>
+                    </div>
+                </div>
+
+                <section class="control-panel">
+                    <div class="field">
+                        <label for="mode">Mód</label>
+                        <select id="mode">
+                            <option value="vulnerable">Vulnerable</option>
+                            <option value="secure" selected>Secure</option>
+                        </select>
+                    </div>
+
+                    <div class="field flex-grow">
+                        <label for="query">Felhasználónév</label>
+                        <input type="text" id="query" placeholder="Pl: admin vagy ' OR '1'='1">
+                    </div>
+
+                    <button id="searchBtn">Keresés</button>
+                </section>
+
+                <div class="status-bar" id="status">Várakozás...</div>
+
+                <div class="dashboard-grid">
+                    <section class="panel panel-large">
+                        <div class="panel-header">
+                            <h3>Eredmények</h3>
+                        </div>
+                        <div class="panel-body">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Felhasználónév</th>
+                                    <th>Email</th>
+                                    <th>Szerepkör</th>
+                                </tr>
+                                </thead>
+                                <tbody id="resultsBody">
+                                <tr>
+                                    <td colspan="4" class="empty">Nincs találat</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>Magyarázat</h3>
+                        </div>
+                        <div class="panel-body" id="explanation">
+                            <p>Itt fog megjelenni a magyarázat.</p>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+            <!-- BLIND SQLI - CONTENT BASED -->
+            <section id="blindContentSection" class="sub-section">
+                <div class="hero-card">
+                    <div>
+                        <h2>Blind SQL Injection - Content based</h2>
+                        <p>A különbség az alkalmazás válaszának tartalmában jelenik meg.</p>
+                    </div>
+                </div>
+
+                <section class="control-panel">
+                    <div class="field">
+                        <label for="blindContentMode">Mód</label>
+                        <select id="blindContentMode">
+                            <option value="vulnerable">Vulnerable</option>
+                            <option value="secure">Secure</option>
+                        </select>
+                    </div>
+
+                    <div class="field flex-grow">
+                        <label for="blindContentInput">Bemenet</label>
+                        <input type="text" id="blindContentInput" placeholder="Pl: admin vagy ' OR '1'='1">
+                    </div>
+
+                    <button id="blindContentBtn">Vizsgálat</button>
+                </section>
+
+                <div class="status-bar" id="blindContentStatus">Várakozás...</div>
+
+                <div class="dashboard-grid">
+                    <section class="panel panel-large">
+                        <div class="panel-header">
+                            <h3>Alkalmazás válasza</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="blindContentResult" class="result-box">Itt fog megjelenni az eredmény.</div>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>Magyarázat</h3>
+                        </div>
+                        <div class="panel-body" id="blindContentExplanation">
+                            <p>Itt a különbség az oldal válaszának tartalmában figyelhető meg.</p>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+            <!-- BLIND SQLI - TIME BASED -->
+            <section id="blindTimeSection" class="sub-section">
+                <div class="hero-card">
+                    <div>
+                        <h2>Blind SQL Injection - Time based</h2>
+                        <p>A különbség a válaszidőben jelenik meg.</p>
+                    </div>
+                </div>
+
+                <section class="control-panel">
+                    <div class="field">
+                        <label for="blindTimeMode">Mód</label>
+                        <select id="blindTimeMode">
+                            <option value="vulnerable">Vulnerable</option>
+                            <option value="secure">Secure</option>
+                        </select>
+                    </div>
+
+                    <div class="field flex-grow">
+                        <label for="blindTimeInput">Bemenet</label>
+                        <input type="text" id="blindTimeInput" placeholder="Pl: DELAY">
+                    </div>
+
+                    <button id="blindTimeBtn">Futtatás</button>
+                </section>
+
+                <div class="status-bar" id="blindTimeStatus">Várakozás...</div>
+
+                <div class="dashboard-grid">
+                    <section class="panel panel-large">
+                        <div class="panel-header">
+                            <h3>Válaszidő és eredmény</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="blindTimeResult" class="result-box">Itt fog megjelenni az eredmény.</div>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>Magyarázat</h3>
+                        </div>
+                        <div class="panel-body" id="blindTimeExplanation">
+                            <p>Itt a különbség a válaszidőben figyelhető meg.</p>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </section>
+
+        <!-- XSS -->
+        <section id="xssSection" class="main-section">
+            <div class="subnav-wrap">
+                <div class="subnav-title">XSS modul</div>
+                <nav class="sub-nav">
+                    <button class="sub-tab active" data-sub-tab="storedXssSection">Stored XSS</button>
+                    <button class="sub-tab" data-sub-tab="reflectedXssSection">Reflected XSS</button>
+                    <button class="sub-tab" data-sub-tab="domXssSection">DOM XSS</button>
+                </nav>
+            </div>
+
+            <!-- Stored -->
+            <section id="storedXssSection" class="sub-section active">
+                <div class="hero-card">
+                    <div>
+                        <h2>Stored XSS</h2>
+                        <p>A bevitt tartalom eltárolódik, majd később jelenik meg újra.</p>
+                    </div>
+                </div>
+
+                <section class="control-panel">
+                    <div class="field">
+                        <label for="xssMode">Mód</label>
+                        <select id="xssMode">
+                            <option value="vulnerable">Vulnerable</option>
+                            <option value="secure">Secure</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label for="author">Név</label>
+                        <input type="text" id="author" placeholder="Név">
+                    </div>
+
+                    <div class="field flex-grow">
+                        <label for="comment">Komment</label>
+                        <input type="text" id="comment" placeholder='Pl: <h1 style="color:red">STORED XSS</h1>'>
+                    </div>
+
+                    <button id="addCommentBtn">Beküldés</button>
+                </section>
+
+                <div class="status-bar" id="xssStatus">Várakozás...</div>
+
+                <div class="dashboard-grid">
+                    <section class="panel panel-large">
+                        <div class="panel-header">
+                            <h3>Kommentek</h3>
+                        </div>
+                        <div class="panel-body" id="commentsContainer">
+                            <p class="empty">Még nincs komment.</p>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>Magyarázat</h3>
+                        </div>
+                        <div class="panel-body" id="xssExplanation">
+                            <p>Vulnerable módban a komment HTML-ként jelenik meg, secure módban szövegként.</p>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+            <!-- Reflected -->
+            <section id="reflectedXssSection" class="sub-section">
+                <div class="hero-card">
+                    <div>
+                        <h2>Reflected XSS</h2>
+                        <p>A bemenet a kérésből visszakerül a válaszba, és ott jelenik meg.</p>
+                    </div>
+                </div>
+
+                <section class="control-panel">
+                    <div class="field">
+                        <label for="reflectedMode">Mód</label>
+                        <select id="reflectedMode">
+                            <option value="vulnerable">Vulnerable</option>
+                            <option value="secure">Secure</option>
+                        </select>
+                    </div>
+
+                    <div class="field flex-grow">
+                        <label for="reflectedInput">Bemenet</label>
+                        <input type="text" id="reflectedInput" placeholder='Pl: <img src=x onerror="alert(`REFLECTED XSS`)">'>
+                    </div>
+
+                    <button id="reflectedBtn">Küldés</button>
+                </section>
+
+                <div class="status-bar" id="reflectedStatus">Várakozás...</div>
+
+                <div class="dashboard-grid">
+                    <section class="panel panel-large">
+                        <div class="panel-header">
+                            <h3>Válasz</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="reflectedResult" class="result-box">Itt fog megjelenni a válasz.</div>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>Magyarázat</h3>
+                        </div>
+                        <div class="panel-body" id="reflectedExplanation">
+                            <p>A szerver visszaküldi a bemenetet, amit a kliens megjelenít.</p>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+            <!-- DOM -->
+            <section id="domXssSection" class="sub-section">
+                <div class="hero-card">
+                    <div>
+                        <h2>DOM XSS</h2>
+                        <p>A tartalom teljesen kliensoldalon, a DOM kezelése közben kerül feldolgozásra.</p>
+                    </div>
+                </div>
+
+                <section class="control-panel">
+                    <div class="field">
+                        <label for="domMode">Mód</label>
+                        <select id="domMode">
+                            <option value="vulnerable" selected>Vulnerable</option>
+                            <option value="secure">Secure</option>
+                        </select>
+                    </div>
+
+                    <div class="field flex-grow">
+                        <label for="domInput">Hash tartalom</label>
+                        <input type="text" id="domInput" placeholder='Pl: <img src=x onerror="alert(`DOM XSS`)">'>
+                    </div>
+
+                    <button id="domBtn">Betöltés</button>
+                </section>
+
+                <div class="status-bar" id="domStatus">Várakozás...</div>
+
+                <div class="dashboard-grid">
+                    <section class="panel panel-large">
+                        <div class="panel-header">
+                            <h3>DOM eredmény</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="domResult" class="result-box">Itt fog megjelenni az URL hash-ből kiolvasott tartalom.</div>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>Magyarázat</h3>
+                        </div>
+                        <div class="panel-body" id="domExplanation">
+                            <p>A tartalom a kliensoldali JavaScriptből kerül a DOM-ba.</p>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </section>
+    </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
