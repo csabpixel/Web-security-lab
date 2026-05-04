@@ -435,6 +435,66 @@ button.accent {
     word-break: break-word;
 }
 
+/* =========================
+   Task help (Hint / Megoldás)
+   ========================= */
+
+.task-help {
+    background: var(--surface-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    transition: border-color 0.15s ease;
+}
+
+.task-help:last-child {
+    margin-bottom: 0;
+}
+
+.task-help[open] {
+    border-color: var(--border-strong);
+}
+
+.task-help > summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--accent-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    list-style: none;
+    padding: 4px 2px;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.task-help > summary::-webkit-details-marker {
+    display: none;
+}
+
+.task-help > summary::before {
+    content: "+";
+    display: inline-block;
+    width: 16px;
+    text-align: center;
+    color: var(--muted);
+    font-weight: 700;
+    transition: transform 0.15s ease;
+}
+
+.task-help[open] > summary::before {
+    content: "−";
+}
+
+.task-help > p,
+.task-help > pre {
+    margin: 8px 0 4px;
+    color: var(--text-soft);
+}
+
 .result-box {
     background: var(--surface-muted);
     border: 1px solid var(--border);
