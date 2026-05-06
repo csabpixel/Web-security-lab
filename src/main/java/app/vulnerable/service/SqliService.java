@@ -75,6 +75,52 @@ public class SqliService {
         }
     }
 
+    // Task 1 — Auth bypass
+
+    public List<Object[]> vulnerableLogin(String username, String password) {
+        String u = username == null ? "" : username;
+        String p = password == null ? "" : password;
+        String sql = "SELECT id, username, role FROM users "
+                   + "WHERE username = '" + u + "' AND password = '" + p + "'";
+        return entityManager.createNativeQuery(sql).getResultList();
+    }
+
+    public List<Object[]> secureLogin(String username, String password) {
+        String sql = "SELECT id, username, role FROM users "
+                   + "WHERE username = ? AND password = ?";
+        Query query = entityManager.createNativeQuery(sql);
+        query.setParameter(1, username == null ? "" : username);
+        query.setParameter(2, password == null ? "" : password);
+        return query.getResultList();
+    }
+
+    public String buildLoginSql(String username, String password) {
+        String u = username == null ? "" : username;
+        String p = password == null ? "" : password;
+        return "SELECT id, username, role FROM users "
+             + "WHERE username = '" + u + "' AND password = '" + p + "'";
+    }
+
+    // Task 2 — UNION-based product search
+
+    public List<Object[]> vulnerableProductSearch(String input) {
+        String safeInput = input == null ? "" : input;
+        String sql = "SELECT name, price FROM products WHERE name ILIKE '%" + safeInput + "%'";
+        return entityManager.createNativeQuery(sql).getResultList();
+    }
+
+    public List<Object[]> secureProductSearch(String input) {
+        String sql = "SELECT name, price FROM products WHERE name ILIKE ?";
+        Query query = entityManager.createNativeQuery(sql);
+        query.setParameter(1, "%" + (input == null ? "" : input) + "%");
+        return query.getResultList();
+    }
+
+    public String buildProductSearchSql(String input) {
+        String safeInput = input == null ? "" : input;
+        return "SELECT name, price FROM products WHERE name ILIKE '%" + safeInput + "%'";
+    }
+
     private static final long MAX_SLEEP_MS = 10_000;
 
     public static long sleep(double seconds) {

@@ -103,4 +103,79 @@ public class SqliController {
                 constructedSql
         );
     }
+
+    //  Első feladat (SQLI)
+
+    public record LoginRequest(String username, String password) {}
+
+    @PostMapping("/tasks/login")
+    public Map<String, Object> taskLogin(@RequestBody LoginRequest request) {
+        List<Object[]> rows = service.vulnerableLogin(request.username(), request.password());
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("constructedSql", service.buildLoginSql(request.username(), request.password()));
+
+        if (rows.isEmpty()) {
+            response.put("success", false);
+            response.put("message", "Sikertelen belépés — érvénytelen felhasználónév vagy jelszó.");
+        } else {
+            Object[] row = rows.get(0);
+            Map<String, Object> user = new LinkedHashMap<>();
+            user.put("id", row[0]);
+            user.put("username", row[1]);
+            user.put("role", row[2]);
+            response.put("success", true);
+            response.put("user", user);
+            String role = String.valueOf(row[2]);
+            String message = "ADMIN".equalsIgnoreCase(role)
+                    ? "🎉 Sikeres belépés ADMIN-ként! A feladat teljesítve."
+                    : "Sikeres belépés " + role + " jogosultsággal.";
+            response.put("message", message);
+        }
+
+        return response;
+    }
+
+    //  Második feladat (SQLI)
+
+    public record ProductSearchRequest(String input) {}
+
+    @PostMapping("/tasks/products")
+    public Map<String, Object> taskProductSearch(@RequestBody ProductSearchRequest request) {
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("constructedSql", service.buildProductSearchSql(request.input()));
+
+        try {
+            List<Object[]> rows = service.vulnerableProductSearch(request.input());
+
+            List<Map<String, Object>> results = new ArrayList<>();
+            for (Object[] row : rows) {
+                Map<String, Object> item = new LinkedHashMap<>();
+                item.put("col1", row.length > 0 ? row[0] : null);
+                item.put("col2", row.length > 1 ? row[1] : null);
+                results.add(item);
+            }
+
+            response.put("count", results.size());
+            response.put("results", results);
+            response.put("message", results.isEmpty()
+                    ? "Nincs találat."
+                    : results.size() + " találat.");
+        } catch (Exception e) {
+            response.put("count", 0);
+            response.put("results", new ArrayList<>());
+            response.put("error", true);
+            response.put("message", "SQL hiba: " + rootMessage(e));
+        }
+        return response;
+    }
+
+    private static String rootMessage(Throwable t) {
+        Throwable cur = t;
+        while (cur.getCause() != null && cur.getCause() != cur) {
+            cur = cur.getCause();
+        }
+        String msg = cur.getMessage();
+        return msg == null ? cur.getClass().getSimpleName() : msg;
+    }
 }

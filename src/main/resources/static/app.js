@@ -178,6 +178,85 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // FELADAT 1 — Auth bypass
+
+    const task1Btn = document.getElementById("task1Btn");
+    const task1User = document.getElementById("task1User");
+    const task1Pass = document.getElementById("task1Pass");
+    const task1Result = document.getElementById("task1Result");
+    const task1Status = document.getElementById("task1Status");
+
+    if (task1Btn) {
+        task1Btn.addEventListener("click", async () => {
+            task1Status.textContent = "Lekérdezés...";
+            try {
+                const res = await fetch("/api/sqli/tasks/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        username: task1User.value,
+                        password: task1Pass.value
+                    })
+                });
+                const data = await res.json();
+
+                let html = `<p><strong>${escapeHtml(data.message)}</strong></p>`;
+                if (data.success && data.user) {
+                    html += `<p>Beléptél mint: <code>${escapeHtml(data.user.username)}</code> (role: <code>${escapeHtml(data.user.role)}</code>)</p>`;
+                }
+                html += `<p>Konstruált SQL: <code>${escapeHtml(data.constructedSql || "")}</code></p>`;
+                task1Result.innerHTML = html;
+                task1Result.classList.toggle("hit", !!data.success);
+                task1Status.textContent = "Kész";
+            } catch (e) {
+                task1Status.textContent = "Hiba: " + e.message;
+            }
+        });
+    }
+
+    // FELADAT 2 — UNION-based extraction
+
+    const task2Btn = document.getElementById("task2Btn");
+    const task2Input = document.getElementById("task2Input");
+    const task2Result = document.getElementById("task2Result");
+    const task2ResultsBody = document.getElementById("task2ResultsBody");
+    const task2Status = document.getElementById("task2Status");
+
+    if (task2Btn) {
+        task2Btn.addEventListener("click", async () => {
+            task2Status.textContent = "Lekérdezés...";
+            try {
+                const res = await fetch("/api/sqli/tasks/products", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        input: task2Input.value
+                    })
+                });
+                const data = await res.json();
+
+                if (!data.results || data.results.length === 0) {
+                    task2ResultsBody.innerHTML = `<tr><td colspan="2" class="empty">Nincs találat.</td></tr>`;
+                } else {
+                    task2ResultsBody.innerHTML = data.results.map(r => `
+                        <tr>
+                            <td>${escapeHtml(String(r.col1 ?? ""))}</td>
+                            <td>${escapeHtml(String(r.col2 ?? ""))}</td>
+                        </tr>
+                    `).join("");
+                }
+
+                task2Result.innerHTML = `
+                    <p><strong>${escapeHtml(data.message)}</strong></p>
+                    <p>Konstruált SQL: <code>${escapeHtml(data.constructedSql || "")}</code></p>
+                `;
+                task2Status.textContent = "Kész";
+            } catch (e) {
+                task2Status.textContent = "Hiba: " + e.message;
+            }
+        });
+    }
+
     // STORED XSS
 
     const addCommentBtn = document.getElementById("addCommentBtn");

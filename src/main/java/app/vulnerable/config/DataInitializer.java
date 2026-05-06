@@ -1,6 +1,8 @@
 package app.vulnerable.config;
 
+import app.vulnerable.model.Product;
 import app.vulnerable.model.User;
+import app.vulnerable.repository.ProductRepository;
 import app.vulnerable.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -11,7 +13,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class DataInitializer {
 
     @Bean
-    public CommandLineRunner initData(UserRepository userRepository, JdbcTemplate jdbc) {
+    public CommandLineRunner initData(UserRepository userRepository,
+                                      ProductRepository productRepository,
+                                      JdbcTemplate jdbc) {
         return args -> {
             jdbc.execute(
                 "CREATE ALIAS IF NOT EXISTS SLEEP "
@@ -22,9 +26,16 @@ public class DataInitializer {
                 + "FOR \"app.vulnerable.service.SqliService.sleepMs\""
             );
 
-            userRepository.save(new User("admin", "admin@test.com", "ADMIN"));
-            userRepository.save(new User("user", "user@test.com", "USER"));
-            userRepository.save(new User("guest", "guest@test.com", "GUEST"));
+            userRepository.save(new User("admin", "admin@test.com", "ADMIN", "S3cretAdminP@ss"));
+            userRepository.save(new User("user",  "user@test.com",  "USER",  "userpass"));
+            userRepository.save(new User("guest", "guest@test.com", "GUEST", "guestpass"));
+
+            productRepository.save(new Product("Apple",1.20));
+            productRepository.save(new Product("Banana",0.80));
+            productRepository.save(new Product("Carrot",0.50));
+            productRepository.save(new Product("Egg",4.90));
+            productRepository.save(new Product("Coconut",2.30));
+            productRepository.save(new Product("Onion",3.10));
         };
     }
 }

