@@ -170,6 +170,41 @@ public class SqliController {
         return response;
     }
 
+    //  Harmadik feladat (SQLI)
+
+    public record Task3Request(String input) {}
+
+    @PostMapping("/tasks/price-search")
+    public Map<String, Object> task3(@RequestBody Task3Request request) {
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("constructedSql", service.buildTask3Sql(request.input()));
+
+        try {
+            List<Object[]> rows = service.vulnerableTask3(request.input());
+
+            List<Map<String, Object>> results = new ArrayList<>();
+            for (Object[] row : rows) {
+                Map<String, Object> item = new LinkedHashMap<>();
+                item.put("col1", row.length > 0 ? row[0] : null);
+                item.put("col2", row.length > 1 ? row[1] : null);
+                item.put("col3", row.length > 2 ? row[2] : null);
+                results.add(item);
+            }
+
+            response.put("count", results.size());
+            response.put("results", results);
+            response.put("message", results.isEmpty()
+                    ? "Nincs találat."
+                    : results.size() + " találat.");
+        } catch (Exception e) {
+            response.put("count", 0);
+            response.put("results", new ArrayList<>());
+            response.put("error", true);
+            response.put("message", "Hiba: " + rootMessage(e));
+        }
+        return response;
+    }
+
     private static String rootMessage(Throwable t) {
         Throwable cur = t;
         while (cur.getCause() != null && cur.getCause() != cur) {

@@ -257,6 +257,47 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // FELADAT 3 — Numeric
+
+    const task3Btn = document.getElementById("task3Btn");
+    const task3Input = document.getElementById("task3Input");
+    const task3Result = document.getElementById("task3Result");
+    const task3ResultsBody = document.getElementById("task3ResultsBody");
+    const task3Status = document.getElementById("task3Status");
+
+    if (task3Btn) {
+        task3Btn.addEventListener("click", async () => {
+            task3Status.textContent = "Lekérdezés...";
+            try {
+                const res = await fetch("/api/sqli/tasks/price-search", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ input: task3Input.value })
+                });
+                const data = await res.json();
+
+                if (!data.results || data.results.length === 0) {
+                    task3ResultsBody.innerHTML = `<tr><td colspan="2" class="empty">Nincs találat.</td></tr>`;
+                } else {
+                    task3ResultsBody.innerHTML = data.results.map(r => `
+                        <tr>
+                            <td>${escapeHtml(String(r.col1 ?? ""))}</td>
+                            <td>${escapeHtml(String(r.col2 ?? ""))}</td>
+                        </tr>
+                    `).join("");
+                }
+
+                task3Result.innerHTML = `
+                    <p><strong>${escapeHtml(data.message)}</strong></p>
+                    <p>Konstruált SQL: <code>${escapeHtml(data.constructedSql || "")}</code></p>
+                `;
+                task3Status.textContent = "Kész";
+            } catch (e) {
+                task3Status.textContent = "Hiba: " + e.message;
+            }
+        });
+    }
+
     // STORED XSS
 
     const addCommentBtn = document.getElementById("addCommentBtn");

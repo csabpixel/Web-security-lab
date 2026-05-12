@@ -1,7 +1,9 @@
 package app.vulnerable.config;
 
+import app.vulnerable.model.CreditCard;
 import app.vulnerable.model.Product;
 import app.vulnerable.model.User;
+import app.vulnerable.repository.CreditCardRepository;
 import app.vulnerable.repository.ProductRepository;
 import app.vulnerable.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -15,6 +17,7 @@ public class DataInitializer {
     @Bean
     public CommandLineRunner initData(UserRepository userRepository,
                                       ProductRepository productRepository,
+                                      CreditCardRepository creditCardRepository,
                                       JdbcTemplate jdbc) {
         return args -> {
             jdbc.execute(
@@ -36,6 +39,10 @@ public class DataInitializer {
             productRepository.save(new Product("Egg",4.90));
             productRepository.save(new Product("Coconut",2.30));
             productRepository.save(new Product("Onion",3.10));
+
+            creditCardRepository.save(new CreditCard("Nagy Lambda",      "4111-1111-1111-1111", "123", "12/27"));
+            creditCardRepository.save(new CreditCard("Kétszer Kettő",    "5500-0000-0000-0004", "456", "06/26"));
+            creditCardRepository.save(new CreditCard("Minusz Végtelen", "3400-0000-0000-009",  "7890", "03/28"));
         };
     }
 }

@@ -506,18 +506,18 @@
             <section id="task3Section" class="sub-section">
                 <div class="hero-card">
                     <div>
-                        <h2>Feladat 3</h2>
-                        <p></p>
+                        <h2>Feladat 3 — Termék lookup név szerint</h2>
+                        <p>Egy belső termék-kereső: add meg a termék pontos nevét, és visszaadja az adatait (ID, név, ár). <strong>A háttérben azonban több tábla is van a DB-ben — köztük egy érzékeny adatokat tároló is. Találd meg, és nyerd ki belőle az adatokat.</strong></p>
                     </div>
                 </div>
 
                 <section class="control-panel">
                     <div class="field flex-grow">
-                        <label for="task3Input">Bemenet</label>
-                        <input type="text" id="task3Input" placeholder="Ide jön a payload">
+                        <label for="task3Input">Termék neve</label>
+                        <input type="text" id="task3Input" placeholder="Pl: Apple">
                     </div>
 
-                    <button id="task3Btn">Beküldés</button>
+                    <button id="task3Btn">Keresés</button>
                 </section>
 
                 <div class="status-bar" id="task3Status">Várakozás...</div>
@@ -525,10 +525,23 @@
                 <div class="dashboard-grid">
                     <section class="panel panel-large">
                         <div class="panel-header">
-                            <h3>Eredmény</h3>
+                            <h3>Találatok</h3>
                         </div>
                         <div class="panel-body">
-                            <div id="task3Result" class="result-box">Itt fog megjelenni a feladat eredménye.</div>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>col1 (ID)</th>
+                                    <th>col2 (Név)</th>
+                                </tr>
+                                </thead>
+                                <tbody id="task3ResultsBody">
+                                <tr>
+                                    <td colspan="2" class="empty">Még nincs keresés.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div id="task3Result" class="result-box" style="margin-top: 12px;">Konstruált SQL itt fog megjelenni.</div>
                         </div>
                     </section>
                 </div>

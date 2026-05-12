@@ -121,6 +121,19 @@ public class SqliService {
         return "SELECT name, price FROM products WHERE name ILIKE '%" + safeInput + "%'";
     }
 
+    // Task 3 — String injection
+
+    public List<Object[]> vulnerableTask3(String input) {
+        String safeInput = input == null ? "" : input;
+        String sql = "SELECT id, name, price FROM products WHERE name ILIKE '" + safeInput + "'";
+        return entityManager.createNativeQuery(sql).getResultList();
+    }
+
+    public String buildTask3Sql(String input) {
+        String safeInput = input == null ? "" : input;
+        return "SELECT id, name, price FROM products WHERE name ILIKE '" + safeInput + "'";
+    }
+
     private static final long MAX_SLEEP_MS = 10_000;
 
     public static long sleep(double seconds) {
