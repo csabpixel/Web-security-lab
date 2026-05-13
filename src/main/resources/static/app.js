@@ -261,7 +261,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const task3Btn = document.getElementById("task3Btn");
     const task3Input = document.getElementById("task3Input");
-    const task3Result = document.getElementById("task3Result");
     const task3ResultsBody = document.getElementById("task3ResultsBody");
     const task3Status = document.getElementById("task3Status");
 
@@ -287,10 +286,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     `).join("");
                 }
 
-                task3Result.innerHTML = `
-                    <p><strong>${escapeHtml(data.message)}</strong></p>
-                    <p>Konstruált SQL: <code>${escapeHtml(data.constructedSql || "")}</code></p>
-                `;
                 task3Status.textContent = "Kész";
             } catch (e) {
                 task3Status.textContent = "Hiba: " + e.message;
