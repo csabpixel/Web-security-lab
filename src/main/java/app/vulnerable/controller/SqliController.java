@@ -205,6 +205,32 @@ public class SqliController {
         return response;
     }
 
+    //  Negyedik feladat (SQLI) — sqlmap
+
+    @GetMapping("/sqlmap/products")
+    public Map<String, Object> sqlmapTarget(@RequestParam(value = "id", defaultValue = "1") String id) {
+        Map<String, Object> response = new LinkedHashMap<>();
+        try {
+            List<Object[]> rows = service.vulnerableSqlmapTarget(id);
+            List<Map<String, Object>> results = new ArrayList<>();
+            for (Object[] row : rows) {
+                Map<String, Object> item = new LinkedHashMap<>();
+                item.put("id", row.length > 0 ? row[0] : null);
+                item.put("name", row.length > 1 ? row[1] : null);
+                item.put("price", row.length > 2 ? row[2] : null);
+                results.add(item);
+            }
+            response.put("count", results.size());
+            response.put("results", results);
+        } catch (Exception e) {
+            response.put("count", 0);
+            response.put("results", new ArrayList<>());
+            response.put("error", true);
+            response.put("message", "SQL hiba: " + rootMessage(e));
+        }
+        return response;
+    }
+
     private static String rootMessage(Throwable t) {
         Throwable cur = t;
         while (cur.getCause() != null && cur.getCause() != cur) {

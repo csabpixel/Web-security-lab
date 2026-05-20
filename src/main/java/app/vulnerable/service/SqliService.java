@@ -134,6 +134,14 @@ public class SqliService {
         return "SELECT id, name, price FROM products WHERE name ILIKE '" + safeInput + "'";
     }
 
+    // Task 4 — sqlmap
+
+    public List<Object[]> vulnerableSqlmapTarget(String id) {
+        String safeInput = id == null ? "1" : id;
+        String sql = "SELECT id, name, price FROM products WHERE id = " + safeInput;
+        return entityManager.createNativeQuery(sql).getResultList();
+    }
+
     private static final long MAX_SLEEP_MS = 10_000;
 
     public static long sleep(double seconds) {

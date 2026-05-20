@@ -435,6 +435,29 @@ button.accent {
     word-break: break-word;
 }
 
+.panel-body pre {
+    background: #1e1612;
+    color: #f5e6d8;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    margin: 6px 0 14px;
+    overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.85rem;
+    line-height: 1.45;
+}
+
+.panel-body pre code {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: inherit;
+    font-size: inherit;
+    word-break: normal;
+    white-space: pre;
+}
+
 /* =========================
    Task help (Hint / Megoldás)
    ========================= */

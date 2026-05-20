@@ -369,6 +369,7 @@
                     <button class="sub-tab active" data-sub-tab="task1Section">Feladat 1</button>
                     <button class="sub-tab" data-sub-tab="task2Section">Feladat 2</button>
                     <button class="sub-tab" data-sub-tab="task3Section">Feladat 3</button>
+                    <button class="sub-tab" data-sub-tab="task4Section">Feladat 4 — sqlmap</button>
                 </nav>
             </div>
 
@@ -544,6 +545,27 @@
                         </div>
                     </section>
                 </div>
+            </section>
+
+            <!-- Feladat 4 — sqlmap -->
+            <section id="task4Section" class="sub-section">
+                <div class="hero-card">
+                    <div>
+                        <h2>Feladat 4 — SQL injection sqlmap-pel</h2>
+                        <p>Az <strong>sqlmap</strong> egy automatizált SQLi tool. <strong>A célod: szerezd meg a rejtett <code>api_keys</code> tábla tartalmát</strong> — API kulcsai vannak benne.</p>
+                    </div>
+                </div>
+
+                <section class="panel" style="margin-bottom: 16px;">
+                    <div class="panel-header">
+                        <h3>Célzott végpont</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>Próbáld ki előbb <a href="/api/sqli/sqlmap/products?id=1" target="_blank"><code>http://localhost:8080/api/sqli/sqlmap/products?id=1</code></a> — működik a böngészőben is, és JSON-ban adja vissza a terméket.</p>
+                        <p>Háttérben: <code>SELECT id, name, price FROM products WHERE id = $id</code> — numerikus injection-pont.</p>
+                    </div>
+                </section>
+
             </section>
         </section>
     </main>

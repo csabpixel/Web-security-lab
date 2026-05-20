@@ -1,8 +1,10 @@
 package app.vulnerable.config;
 
+import app.vulnerable.model.ApiKey;
 import app.vulnerable.model.CreditCard;
 import app.vulnerable.model.Product;
 import app.vulnerable.model.User;
+import app.vulnerable.repository.ApiKeyRepository;
 import app.vulnerable.repository.CreditCardRepository;
 import app.vulnerable.repository.ProductRepository;
 import app.vulnerable.repository.UserRepository;
@@ -18,6 +20,7 @@ public class DataInitializer {
     public CommandLineRunner initData(UserRepository userRepository,
                                       ProductRepository productRepository,
                                       CreditCardRepository creditCardRepository,
+                                      ApiKeyRepository apiKeyRepository,
                                       JdbcTemplate jdbc) {
         return args -> {
             jdbc.execute(
@@ -43,6 +46,9 @@ public class DataInitializer {
             creditCardRepository.save(new CreditCard("Nagy Lambda",      "4111-1111-1111-1111", "123", "12/27"));
             creditCardRepository.save(new CreditCard("Kétszer Kettő",    "5500-0000-0000-0004", "456", "06/26"));
             creditCardRepository.save(new CreditCard("Minusz Végtelen", "3400-0000-0000-009",  "7890", "03/28"));
+
+            apiKeyRepository.save(new ApiKey("AWS",     "1234567890ABCDEF"));
+            apiKeyRepository.save(new ApiKey("OpenAI",     "sk-pro8fdfefqqyxw9876"));
         };
     }
 }
