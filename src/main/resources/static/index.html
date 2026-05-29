@@ -20,6 +20,7 @@
             <button class="main-tab active" data-main-tab="sqliSection">SQL Injection</button>
             <button class="main-tab" data-main-tab="xssSection">XSS</button>
             <button class="main-tab" data-main-tab="tasksSection">SQLi feladatok</button>
+            <button class="main-tab" data-main-tab="csrfSection">CSRF</button>
         </nav>
     </header>
 
@@ -567,6 +568,114 @@
                 </section>
 
             </section>
+        </section>
+
+        <!-- CSRF -->
+        <section id="csrfSection" class="main-section">
+            <div class="subnav-wrap">
+                <div class="subnav-title">CSRF modul</div>
+                <nav class="sub-nav">
+                    <button class="sub-tab active" data-sub-tab="csrfIntroSection">Bevezetés</button>
+                    <button class="sub-tab" data-sub-tab="csrfDemoSection">CSRF demó</button>
+                </nav>
+            </div>
+
+            <section id="csrfIntroSection" class="sub-section active">
+                <div class="hero-card">
+                    <div>
+                        <h2>Cross-Site Request Forgery (CSRF)</h2>
+                        <p>Egy másik weboldal a <strong>te nevedben</strong> hajt végre műveletet azon az oldalon, ahova be vagy jelentkezve.</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <section class="panel panel-large">
+                        <div class="panel-header">
+                            <h3>Hogyan működik?</h3>
+                        </div>
+                        <div class="panel-body">
+                            <p>A böngésző <strong>minden kérésnél automatikusan rácsatolja a target oldal cookie-ját</strong> — függetlenül attól, melyik oldalról indul a kérés. Ha be vagy jelentkezve a <code>bank.com</code>-ra, és egy másik tabban egy fertőzött oldal egy rejtett <code>&lt;img src="bank.com/transfer?to=hacker&amp;amount=1000"&gt;</code>-et tartalmaz, a böngésződ az utalást is a session cookie-ddal indítja — a bank pedig valódi felhasználói műveletként végrehajtja.(Ez csak egy példa.)</p>
+                            <p>Védekezés: <strong>CSRF token</strong> (egyszer-használatos titok, amit cross-site oldal nem tud kitalálni) és <strong>SameSite cookie</strong> (a böngésző nem küldi cross-site kérésnél). A következő tabon élesben végrehajthatsz egy CSRF támadást.</p>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>XSS vs CSRF</h3>
+                        </div>
+                        <div class="panel-body">
+                            <p>• <strong>XSS</strong>: kódot futtat a böngésződben → <em>adatot lop</em>.</p>
+                            <p>• <strong>CSRF</strong>: téged használ proxy-ként → <em>cselekvést végez a nevedben</em>.</p>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+            <!-- CSRF demó -->
+            <section id="csrfDemoSection" class="sub-section">
+                <div class="hero-card">
+                    <div>
+                        <h2>Csináljunk egy CSRF támadást!</h2>
+                        <p>Képzeld el: be vagy jelentkezve egy oldalra, ahol az emailedet bármikor megváltoztathatod. Aztán véletlenül megnyitsz egy fertőzött blogot egy másik fülön. <strong>Egy kattintással a hacker átveszi az email címedet</strong> — anélkül, hogy bármit gépelnél vagy észrevennéd.</p>
+                        <p style="margin-top: 10px;">Bal oldalon vagy <em>te</em> (a saját fiókod), jobb oldalon meg <em>a hacker</em> oldala. Próbáld ki: írj egy támadó kódot az evil panelre, és nézd ahogy az email a bal oldalon „varázsütésre" megváltozik. Aztán kapcsold <strong>Secure módra</strong> — most a védelem be van kapcsolva, ugyanaz a támadás már nem fog menni.</p>
+                    </div>
+                </div>
+
+                <section class="control-panel">
+                    <div class="field">
+                        <label for="csrfMode">A védelem be van kapcsolva?</label>
+                        <select id="csrfMode">
+                            <option value="vulnerable" selected>Nincs védelem (Vulnerable)</option>
+                            <option value="secure">Védelem aktív (Secure)</option>
+                        </select>
+                    </div>
+                    <button id="csrfResetBtn">Indítás újra (új email + új token)</button>
+                </section>
+
+                <div class="status-bar" id="csrfStatus">Várakozás...</div>
+
+                <div class="dashboard-grid">
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>A te fiókod</h3>
+                        </div>
+                        <div class="panel-body">
+                            <p>Be vagy jelentkezve mint <strong id="csrfUsername">Te</strong>. Az oldal a böngésződben lévő session sütiből tudja, hogy te vagy az.</p>
+                            <p>Az aktuális emailed: <strong id="csrfEmail" style="font-size: 1.15rem; color: var(--accent-dark);">—</strong></p>
+                            <p style="font-size: 0.88rem; color: var(--muted);">Az oldal egyedi titkos kódot (CSRF token) is generál neked, amit a saját formjaiba beszúr: <code id="csrfToken">—</code>. Ezt egy idegen oldal nem tudja kitalálni.</p>
+
+                            <h4 style="margin-top: 16px;">Saját email-csere (innen a profil oldalról):</h4>
+                            <div class="control-panel" style="padding: 0; border: none; background: transparent;">
+                                <div class="field flex-grow"><label for="csrfLegitEmail">Új email</label><input type="text" id="csrfLegitEmail" placeholder="uj@email.hu" value="uj@email.hu"></div>
+                                <button id="csrfLegitBtn">Mentés</button>
+                            </div>
+
+                            <h4 style="margin-top: 16px;">Hogy változott az email:</h4>
+                            <ul id="csrfHistory" style="font-family: ui-monospace,monospace; font-size: 0.85rem; padding-left: 18px;"></ul>
+                        </div>
+                    </section>
+
+                    <section class="panel">
+                        <div class="panel-header">
+                            <h3>A hacker oldala</h3>
+                        </div>
+                        <div class="panel-body">
+                            <p style="color: var(--muted); font-size: 0.88rem;">Most te vagy a hacker. Készítesz egy szimpatikus kinézetű oldalt — pl. egy macskás blogot vagy egy receptet —, és belerejtesz egy kis HTML-t, ami a háttérben kiadja a támadó kérést a mysite.com-nak. Amikor az áldozat meglátogatja (miközben még be van jelentkezve), a böngésző automatikusan elküldi a sütit a kéréshez, és a támadás lefut.</p>
+
+                            <label for="csrfEvilCode" style="display:block; margin-top:14px; margin-bottom:6px; color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.8px;">Írd ide a támadó HTML-t:</label>
+                            <textarea id="csrfEvilCode" rows="4" style="width:100%; font-family: ui-monospace,monospace; font-size: 0.85rem; background: #1e1612; color: #f5e6d8; border: 1px solid var(--border-strong); border-radius: var(--radius-md); padding: 10px;">&lt;img src=&quot;/api/csrf/change-email?email=hacker@evil.com&quot;&gt;</textarea>
+
+                            <button id="csrfEvilBtn" style="margin-top: 10px;">Az áldozat megnyitja az oldalt</button>
+
+                            <p style="color: var(--muted); font-size: 0.85rem; margin-top: 14px;">Ezt látja az áldozat (a böngészője ezt renderelné):</p>
+                            <div id="csrfEvilRender" style="border: 1px dashed var(--border-strong); padding: 14px; min-height: 60px; border-radius: var(--radius-md); background: var(--surface-muted); color: var(--text-soft);">(még nincs betöltve)</div>
+
+                            <p style="color: var(--muted); font-size: 0.85rem; margin-top: 14px;">Próbálj más támadó kódokat is — pl. <code>&lt;iframe&gt;</code>-et vagy automatikusan beküldő <code>&lt;form&gt;</code>-ot. A klasszikus <code>&lt;img&gt;</code> trükk azért működik, mert a böngésző azt hiszi, csak egy képet tölt — közben a mysite.com endpoint-ját szólítja meg a te sütiddel.</p>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
         </section>
     </main>
 </div>

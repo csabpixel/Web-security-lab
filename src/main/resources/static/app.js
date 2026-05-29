@@ -293,6 +293,122 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // CSRF DEMÓ
+
+    const csrfMode = document.getElementById("csrfMode");
+    const csrfResetBtn = document.getElementById("csrfResetBtn");
+    const csrfUsername = document.getElementById("csrfUsername");
+    const csrfEmail = document.getElementById("csrfEmail");
+    const csrfToken = document.getElementById("csrfToken");
+    const csrfHistory = document.getElementById("csrfHistory");
+    const csrfStatus = document.getElementById("csrfStatus");
+    const csrfLegitBtn = document.getElementById("csrfLegitBtn");
+    const csrfLegitEmail = document.getElementById("csrfLegitEmail");
+    const csrfEvilBtn = document.getElementById("csrfEvilBtn");
+
+    function csrfRenderState(data) {
+        if (!data) return;
+        if (csrfUsername) csrfUsername.textContent = data.username ?? "Te";
+        if (csrfEmail) csrfEmail.textContent = data.email ?? "—";
+        if (csrfToken) csrfToken.textContent = data.csrfToken ?? "—";
+        const hist = data.history || [];
+        if (csrfHistory) {
+            if (hist.length === 0) {
+                csrfHistory.innerHTML = `<li style="color: var(--muted);">(még nincs változás)</li>`;
+            } else {
+                csrfHistory.innerHTML = hist.map(h => `<li>${escapeHtml(h)}</li>`).join("");
+            }
+        }
+    }
+
+    async function csrfLoadState() {
+        try {
+            const res = await fetch("/api/csrf/state");
+            const data = await res.json();
+            csrfRenderState(data);
+        } catch (e) {
+
+        }
+    }
+
+    if (csrfResetBtn) {
+        csrfResetBtn.addEventListener("click", async () => {
+            csrfStatus.textContent = "Reset...";
+            const res = await fetch("/api/csrf/reset", { method: "POST" });
+            const data = await res.json();
+            csrfRenderState(data);
+            csrfStatus.textContent = "Profil visszaállítva, új CSRF token generálva.";
+        });
+    }
+
+    if (csrfLegitBtn) {
+        csrfLegitBtn.addEventListener("click", async () => {
+            const newEmail = csrfLegitEmail.value || "uj@email.hu";
+            const mode = csrfMode.value;
+
+            csrfStatus.textContent = "Email csere (" + mode + " módban)...";
+
+            if (mode === "vulnerable") {
+                const res = await fetch(`/api/csrf/change-email?email=${encodeURIComponent(newEmail)}`);
+                const data = await res.json();
+                csrfRenderState(data);
+                csrfStatus.textContent = "Email csere (vulnerable mód, GET) — " + data.message;
+            } else {
+                const token = csrfToken.textContent;
+                const res = await fetch("/api/csrf/change-email-secure", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: newEmail, csrfToken: token })
+                });
+                const data = await res.json();
+                csrfRenderState(data);
+                csrfStatus.textContent = data.success
+                    ? "Email csere sikeres (secure mód, POST + CSRF token)."
+                    : "Hiba: " + data.message;
+            }
+        });
+    }
+
+    const csrfEvilCode = document.getElementById("csrfEvilCode");
+    const csrfEvilRender = document.getElementById("csrfEvilRender");
+
+    if (csrfEvilBtn) {
+        csrfEvilBtn.addEventListener("click", async () => {
+            const code = csrfEvilCode ? csrfEvilCode.value : "";
+            const emailBefore = csrfEmail ? csrfEmail.textContent : "";
+            csrfStatus.textContent = "Evil oldal betöltése — a HTML-ed renderelődik...";
+
+            csrfEvilRender.innerHTML = code;
+
+            await new Promise(r => setTimeout(r, 600));
+            await csrfLoadState();
+
+            const emailAfter = csrfEmail ? csrfEmail.textContent : "";
+            if (emailBefore !== emailAfter) {
+                csrfStatus.textContent = "CSRF támadás sikeres! Az emailed " + emailBefore + " → " + emailAfter + " (vulnerable módban a GET endpoint elfogadja a kérést, mert a böngésző rácsatolta a session cookie-dat).";
+            } else {
+                csrfStatus.textContent = "️Az email nem változott. (Secure módban a GET endpoint le van tiltva, így a klasszikus <img>-trükk nem működik.)";
+            }
+        });
+    }
+
+    async function csrfSyncMode() {
+        const mode = csrfMode.value;
+        await fetch("/api/csrf/set-mode", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ mode })
+        });
+        await csrfLoadState();
+        csrfStatus.textContent = "Mód váltva: " + mode + (mode === "secure" ? " — a backend most már elutasítja az állapot-módosító GET kéréseket." : " — a GET endpoint nyitva, sebezhető.");
+    }
+
+    if (csrfMode) {
+        csrfMode.addEventListener("change", csrfSyncMode);
+    }
+
+    csrfLoadState();
+
     // STORED XSS
 
     const addCommentBtn = document.getElementById("addCommentBtn");
