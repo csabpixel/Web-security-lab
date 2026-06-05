@@ -92,6 +92,27 @@ public class CsrfController {
         return performChange(newEmail, session, "POST (CSRF token OK)");
     }
 
+    @GetMapping(value = "/task/expense", produces = "text/plain")
+    public String taskExpense(
+            @RequestParam(value = "description", defaultValue = "") String description,
+            @RequestParam(value = "amount", defaultValue = "0") String amount) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Új költés rögzítve\n");
+        sb.append("Leírás: ").append(description).append("\n");
+        sb.append("Összeg: ").append(amount).append(" Ft");
+
+        try {
+            int amt = Integer.parseInt(amount.trim());
+            if (amt > 9500) {
+                sb.append("\n Magas összegű költés — admin jóváhagyás szükséges.\n");
+                sb.append("Megjegyzés: <img src=x onerror=alert('túlköltés')>");
+            }
+        } catch (NumberFormatException e) {
+
+        }
+        return sb.toString();
+    }
+
     @SuppressWarnings("unchecked")
     private Map<String, Object> performChange(String newEmail, HttpSession session, String how) {
         String oldEmail = (String) session.getAttribute("csrfEmail");

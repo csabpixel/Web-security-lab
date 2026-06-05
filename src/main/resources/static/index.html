@@ -21,6 +21,7 @@
             <button class="main-tab" data-main-tab="xssSection">XSS</button>
             <button class="main-tab" data-main-tab="tasksSection">SQLi feladatok</button>
             <button class="main-tab" data-main-tab="csrfSection">CSRF</button>
+            <button class="main-tab" data-main-tab="csrfTaskMainSection">CSRF feladat</button>
         </nav>
     </header>
 
@@ -676,6 +677,41 @@
                 </div>
             </section>
 
+        </section>
+
+        <!-- CSRF FELADAT -->
+        <section id="csrfTaskMainSection" class="main-section">
+            <div class="hero-card">
+                <div>
+                    <h2>Találd meg a rejtett kódot, és futtasd le!</h2>
+                    <p>Szeretnél venni pizzát és ezen a helyen fel kell töltened pénzt, majd abból kifizetni, amit szeretnél. A Te egyenlegeden 9500 Ft van.</p>
+
+                    <p class="csrf-task-step-row">
+                        <a class="csrf-task-link" href="/api/csrf/task/expense?description=Pizza&amount=2500" target="_blank">
+                            /api/csrf/task/expense?description=Pizza&amount=2500
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <h3>Itt illeszd be a kódot</h3>
+                </div>
+                <div class="panel-body">
+                    <label for="csrfTaskXssInput" class="csrf-task-label">Kód:</label>
+                    <input type="text" id="csrfTaskXssInput" class="csrf-task-input" placeholder="Ide illeszd a kódot, amit az endpoint válaszában találtál">
+
+                    <button id="csrfTaskXssBtn" class="csrf-task-btn">Renderelés</button>
+
+                    <p class="csrf-task-result-label">Eredmény:</p>
+                    <div id="csrfTaskXssResult" class="csrf-task-result">(még üres)</div>
+
+                    <div id="csrfTaskSuccess" class="csrf-task-success">
+                        <p class="csrf-task-success-title">Feladat teljesítve!</p>
+                    </div>
+                </div>
+            </section>
         </section>
     </main>
 </div>

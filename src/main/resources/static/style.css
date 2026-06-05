@@ -1,5 +1,4 @@
 :root {
-    /* Light, warm palette — ugyanaz az accent család, csak világos háttérre */
     --bg: #f6f1ea;
     --bg-soft: #efe7dc;
     --surface: #ffffff;
@@ -96,7 +95,7 @@ body {
 }
 
 /* =========================
-   Main tabs — aláhúzott stílus (mint a képen)
+   Main tabs
    ========================= */
 
 .main-nav {
@@ -139,7 +138,7 @@ body {
 }
 
 /* =========================
-   Sub tabs — outlined pillek
+   Sub tabs
    ========================= */
 
 .sub-nav {
@@ -211,7 +210,7 @@ body {
 }
 
 /* =========================
-   Hero card — világos bézs, mint a képen
+   Hero card
    ========================= */
 
 .hero-card {
@@ -459,7 +458,90 @@ button.accent {
 }
 
 /* =========================
-   Task help (Hint / Megoldás)
+   CSRF feladat
+   ========================= */
+
+.csrf-task-link {
+    color: var(--accent-dark);
+    font-weight: 600;
+}
+
+.csrf-task-step {
+    margin-top: 14px;
+}
+
+.csrf-task-step-row {
+    margin-top: 6px;
+}
+
+.csrf-task-hint {
+    color: var(--muted);
+    font-size: 0.88rem;
+    margin-top: 6px;
+}
+
+.csrf-task-label {
+    display: block;
+    margin-top: 14px;
+    margin-bottom: 6px;
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.csrf-task-input {
+    width: 100%;
+}
+
+.csrf-task-btn {
+    margin-top: 10px;
+}
+
+.csrf-task-result-label {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-top: 14px;
+}
+
+.csrf-task-result {
+    border: 1px dashed var(--border-strong);
+    padding: 14px;
+    min-height: 60px;
+    border-radius: var(--radius-md);
+    background: var(--surface-muted);
+    color: var(--text-soft);
+}
+
+.csrf-task-success {
+    display: none;
+    margin-top: 18px;
+    padding: 16px 18px;
+    background: rgba(47, 107, 79, 0.12);
+    border: 1px solid rgba(47, 107, 79, 0.45);
+    border-radius: var(--radius-md);
+    color: #2f6b4f;
+}
+
+.csrf-task-success.show {
+    display: block;
+}
+
+.csrf-task-success-title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.csrf-task-success-text {
+    margin: 6px 0 0;
+    color: var(--text-soft);
+    font-size: 0.9rem;
+}
+
+/* =========================
+   Task help
    ========================= */
 
 .task-help {

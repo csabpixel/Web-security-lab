@@ -409,6 +409,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     csrfLoadState();
 
+    const csrfTaskXssInput = document.getElementById("csrfTaskXssInput");
+    const csrfTaskXssBtn = document.getElementById("csrfTaskXssBtn");
+    const csrfTaskXssResult = document.getElementById("csrfTaskXssResult");
+    const csrfTaskSuccess = document.getElementById("csrfTaskSuccess");
+
+    if (csrfTaskXssBtn) {
+        csrfTaskXssBtn.addEventListener("click", () => {
+            const value = csrfTaskXssInput.value;
+
+
+            csrfTaskXssResult.innerHTML = value;
+
+            const lower = value.toLowerCase();
+            const ok = lower.includes("<img") &&
+                       lower.includes("onerror") &&
+                       value.includes("túlköltés");
+            if (csrfTaskSuccess) {
+                csrfTaskSuccess.classList.toggle("show", ok);
+            }
+        });
+    }
+
     // STORED XSS
 
     const addCommentBtn = document.getElementById("addCommentBtn");
