@@ -409,27 +409,90 @@ document.addEventListener("DOMContentLoaded", () => {
 
     csrfLoadState();
 
-    const csrfTaskXssInput = document.getElementById("csrfTaskXssInput");
-    const csrfTaskXssBtn = document.getElementById("csrfTaskXssBtn");
-    const csrfTaskXssResult = document.getElementById("csrfTaskXssResult");
-    const csrfTaskSuccess = document.getElementById("csrfTaskSuccess");
+    // PIZZA SHOP
 
-    if (csrfTaskXssBtn) {
-        csrfTaskXssBtn.addEventListener("click", () => {
-            const value = csrfTaskXssInput.value;
+    const pizzaLoginView = document.getElementById("pizzaLoginView");
+    const pizzaAppView = document.getElementById("pizzaAppView");
+    const pizzaLoginUser = document.getElementById("pizzaLoginUser");
+    const pizzaLoginPass = document.getElementById("pizzaLoginPass");
+    const pizzaLoginBtn = document.getElementById("pizzaLoginBtn");
+    const pizzaLoginStatus = document.getElementById("pizzaLoginStatus");
+    const pizzaLogoutBtn = document.getElementById("pizzaLogoutBtn");
+    const pizzaUsernameEl = document.getElementById("pizzaUsername");
 
+    function pizzaShowLoggedIn(username) {
+        if (pizzaLoginView) pizzaLoginView.classList.add("pizza-hidden");
+        if (pizzaAppView) pizzaAppView.classList.remove("pizza-hidden");
+        if (pizzaUsernameEl) pizzaUsernameEl.textContent = username || "—";
+        if (pizzaLoginStatus) {
+            pizzaLoginStatus.textContent = "";
+            pizzaLoginStatus.className = "pizza-status";
+        }
+    }
 
-            csrfTaskXssResult.innerHTML = value;
+    function pizzaShowLoggedOut() {
+        if (pizzaLoginView) pizzaLoginView.classList.remove("pizza-hidden");
+        if (pizzaAppView) pizzaAppView.classList.add("pizza-hidden");
+        if (pizzaLoginUser) pizzaLoginUser.value = "";
+        if (pizzaLoginPass) pizzaLoginPass.value = "";
+    }
 
-            const lower = value.toLowerCase();
-            const ok = lower.includes("<img") &&
-                       lower.includes("onerror") &&
-                       value.includes("túlköltés");
-            if (csrfTaskSuccess) {
-                csrfTaskSuccess.classList.toggle("show", ok);
+    async function pizzaCheckMe() {
+        try {
+            const res = await fetch("/api/pizza/me");
+            const data = await res.json();
+            if (data.loggedIn) pizzaShowLoggedIn(data.username);
+            else pizzaShowLoggedOut();
+        } catch (e) {  }
+    }
+
+    if (pizzaLoginBtn) {
+        pizzaLoginBtn.addEventListener("click", async () => {
+            const username = pizzaLoginUser.value.trim();
+            const password = pizzaLoginPass.value;
+            if (!username || !password) {
+                pizzaLoginStatus.textContent = "Add meg a felhasználónevet és jelszót.";
+                pizzaLoginStatus.className = "pizza-status error";
+                return;
+            }
+            pizzaLoginStatus.textContent = "Belépés...";
+            pizzaLoginStatus.className = "pizza-status";
+            try {
+                const res = await fetch("/api/pizza/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    pizzaShowLoggedIn(data.username);
+                } else {
+                    pizzaLoginStatus.textContent = data.message || "Sikertelen belépés.";
+                    pizzaLoginStatus.className = "pizza-status error";
+                }
+            } catch (e) {
+                pizzaLoginStatus.textContent = "Hálózati hiba: " + e.message;
+                pizzaLoginStatus.className = "pizza-status error";
             }
         });
     }
+
+    if (pizzaLogoutBtn) {
+        pizzaLogoutBtn.addEventListener("click", async () => {
+            try {
+                await fetch("/api/pizza/logout", { method: "POST" });
+            } catch (e) {}
+            pizzaShowLoggedOut();
+        });
+    }
+
+    if (pizzaLoginPass) {
+        pizzaLoginPass.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") pizzaLoginBtn.click();
+        });
+    }
+
+    pizzaCheckMe();
 
     // STORED XSS
 

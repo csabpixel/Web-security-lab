@@ -681,37 +681,56 @@
 
         <!-- CSRF FELADAT -->
         <section id="csrfTaskMainSection" class="main-section">
-            <div class="hero-card">
-                <div>
-                    <h2>Találd meg a rejtett kódot, és futtasd le!</h2>
-                    <p>Szeretnél venni pizzát és ezen a helyen fel kell töltened pénzt, majd abból kifizetni, amit szeretnél. A Te egyenlegeden 9500 Ft van.</p>
 
-                    <p class="csrf-task-step-row">
-                        <a class="csrf-task-link" href="/api/csrf/task/expense?description=Pizza&amount=2500" target="_blank">
-                            /api/csrf/task/expense?description=Pizza&amount=2500
-                        </a>
-                    </p>
-                </div>
-            </div>
-
-            <section class="panel">
-                <div class="panel-header">
-                    <h3>Itt illeszd be a kódot</h3>
-                </div>
-                <div class="panel-body">
-                    <label for="csrfTaskXssInput" class="csrf-task-label">Kód:</label>
-                    <input type="text" id="csrfTaskXssInput" class="csrf-task-input" placeholder="Ide illeszd a kódot, amit az endpoint válaszában találtál">
-
-                    <button id="csrfTaskXssBtn" class="csrf-task-btn">Renderelés</button>
-
-                    <p class="csrf-task-result-label">Eredmény:</p>
-                    <div id="csrfTaskXssResult" class="csrf-task-result">(még üres)</div>
-
-                    <div id="csrfTaskSuccess" class="csrf-task-success">
-                        <p class="csrf-task-success-title">Feladat teljesítve!</p>
+            <!-- Bejelentkezés -->
+            <div id="pizzaLoginView">
+                <div class="hero-card">
+                    <div>
+                        <h2>Belépés</h2>
+                        <p>Lépj be a fiókodba, hogy pizzát rendelhess. A feladathoz két próbafelhasználó van: az egyik a normál felhasználó (áldozat), a másik a támadó.</p>
                     </div>
                 </div>
-            </section>
+
+                <section class="panel">
+                    <div class="panel-header">
+                        <h3>Bejelentkezés</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>Próbafelhasználók:</p>
+                        <ul class="pizza-users">
+                            <li><code>xyz</code> / jelszó: <code>xyz123</code> — normál felhasználó (áldozat)</li>
+                            <li><code>hacker</code> / jelszó: <code>hacker123</code> — támadó</li>
+                        </ul>
+
+                        <label for="pizzaLoginUser" class="pizza-label">Felhasználónév</label>
+                        <input type="text" id="pizzaLoginUser" class="pizza-input" placeholder="xyz">
+
+                        <label for="pizzaLoginPass" class="pizza-label">Jelszó</label>
+                        <input type="password" id="pizzaLoginPass" class="pizza-input" placeholder="...">
+
+                        <button id="pizzaLoginBtn" class="pizza-btn">Belépés</button>
+
+                        <div id="pizzaLoginStatus" class="pizza-status"></div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Belépett nézet -->
+            <div id="pizzaAppView" class="pizza-hidden">
+                <div class="hero-card">
+                    <div>
+                        <h2>Üdv, <span id="pizzaUsername">—</span>!</h2>
+                        <p>Sikeresen bejelentkeztél.</p>
+                    </div>
+                </div>
+
+                <section class="panel">
+                    <div class="panel-body">
+                        <button id="pizzaLogoutBtn" class="pizza-btn">Kijelentkezés</button>
+                    </div>
+                </section>
+            </div>
+
         </section>
     </main>
 </div>
