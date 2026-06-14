@@ -428,6 +428,98 @@ document.addEventListener("DOMContentLoaded", () => {
             pizzaLoginStatus.textContent = "";
             pizzaLoginStatus.className = "pizza-status";
         }
+        pizzaLoadMenu();
+        pizzaRefreshBalance();
+    }
+
+    const pizzaBalanceEl = document.getElementById("pizzaBalance");
+    const pizzaMenuPizzas = document.getElementById("pizzaMenuPizzas");
+    const pizzaMenuDrinks = document.getElementById("pizzaMenuDrinks");
+    const pizzaOrders = document.getElementById("pizzaOrders");
+    const pizzaOrderStatus = document.getElementById("pizzaOrderStatus");
+
+    let pizzaMenuCache = null;
+
+    async function pizzaLoadMenu() {
+        if (pizzaMenuCache) {
+            pizzaRenderMenu(pizzaMenuCache);
+            return;
+        }
+        try {
+            const res = await fetch("/api/pizza/menu");
+            const data = await res.json();
+            pizzaMenuCache = data;
+            pizzaRenderMenu(data);
+        } catch (e) { }
+    }
+
+    function pizzaRenderMenu(items) {
+        if (!pizzaMenuPizzas || !pizzaMenuDrinks) return;
+        pizzaMenuPizzas.innerHTML = "";
+        pizzaMenuDrinks.innerHTML = "";
+        items.forEach(item => {
+            const card = document.createElement("div");
+            card.className = "pizza-item";
+            card.innerHTML = `
+                <img class="pizza-item-img" src="${item.image}" alt="${escapeHtml(item.name)}">
+                <div class="pizza-item-body">
+                    <div class="pizza-item-name">${escapeHtml(item.name)}</div>
+                    <div class="pizza-item-price">${item.price} Ft</div>
+                    <button class="pizza-item-btn" data-item-id="${item.id}">Rendelés</button>
+                </div>
+            `;
+            const btn = card.querySelector("button");
+            btn.addEventListener("click", () => pizzaOrder(item.id));
+            (item.category === "pizza" ? pizzaMenuPizzas : pizzaMenuDrinks).appendChild(card);
+        });
+    }
+
+    async function pizzaRefreshBalance() {
+        try {
+            const res = await fetch("/api/pizza/balance");
+            const data = await res.json();
+            if (!data.loggedIn) {
+                pizzaShowLoggedOut();
+                return;
+            }
+            if (pizzaBalanceEl) pizzaBalanceEl.textContent = data.balance;
+            pizzaRenderOrders(data.orders || []);
+        } catch (e) { }
+    }
+
+    function pizzaRenderOrders(list) {
+        if (!pizzaOrders) return;
+        if (list.length === 0) {
+            pizzaOrders.className = "pizza-orders empty";
+            pizzaOrders.innerHTML = "<li>(még nincs rendelésed)</li>";
+            return;
+        }
+        pizzaOrders.className = "pizza-orders";
+        pizzaOrders.innerHTML = list.map(o => `<li>${escapeHtml(o)}</li>`).join("");
+    }
+
+    async function pizzaOrder(itemId) {
+        if (pizzaOrderStatus) {
+            pizzaOrderStatus.textContent = "Rendelés...";
+            pizzaOrderStatus.className = "pizza-status";
+        }
+        try {
+            const res = await fetch(`/api/pizza/order?item=${encodeURIComponent(itemId)}`);
+            const data = await res.json();
+            if (pizzaOrderStatus) {
+                pizzaOrderStatus.textContent = data.message || "";
+                pizzaOrderStatus.className = "pizza-status " + (data.success ? "success" : "error");
+            }
+            if (typeof data.balance === "number" && pizzaBalanceEl) {
+                pizzaBalanceEl.textContent = data.balance;
+            }
+            await pizzaRefreshBalance();
+        } catch (e) {
+            if (pizzaOrderStatus) {
+                pizzaOrderStatus.textContent = "Hálózati hiba: " + e.message;
+                pizzaOrderStatus.className = "pizza-status error";
+            }
+        }
     }
 
     function pizzaShowLoggedOut() {

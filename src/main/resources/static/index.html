@@ -717,16 +717,43 @@
 
             <!-- Belépett nézet -->
             <div id="pizzaAppView" class="pizza-hidden">
-                <div class="hero-card">
+                <div class="hero-card pizza-hero">
                     <div>
                         <h2>Üdv, <span id="pizzaUsername">—</span>!</h2>
-                        <p>Sikeresen bejelentkeztél.</p>
+                        <p>Válassz a kínálatból. A rendelés azonnal levonja az árát az egyenlegedből.</p>
+                    </div>
+                    <div class="pizza-balance-box">
+                        <span class="pizza-balance-label">Egyenleg</span>
+                        <span class="pizza-balance-value"><span id="pizzaBalance">—</span> Ft</span>
+                        <button id="pizzaLogoutBtn" class="pizza-btn pizza-logout">Kijelentkezés</button>
                     </div>
                 </div>
 
                 <section class="panel">
+                    <div class="panel-header">
+                        <h3>Pizzák</h3>
+                    </div>
                     <div class="panel-body">
-                        <button id="pizzaLogoutBtn" class="pizza-btn">Kijelentkezés</button>
+                        <div id="pizzaMenuPizzas" class="pizza-menu-grid"></div>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-header">
+                        <h3>Üdítők</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div id="pizzaMenuDrinks" class="pizza-menu-grid"></div>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-header">
+                        <h3>Rendeléseid</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul id="pizzaOrders" class="pizza-orders"></ul>
+                        <p id="pizzaOrderStatus" class="pizza-status"></p>
                     </div>
                 </section>
             </div>

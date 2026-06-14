@@ -508,6 +508,115 @@ button.accent {
     color: var(--success);
 }
 
+.pizza-hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.pizza-balance-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    padding: 12px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    min-width: 180px;
+}
+
+.pizza-balance-label {
+    color: var(--muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+}
+
+.pizza-balance-value {
+    color: var(--accent-dark);
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+}
+
+.pizza-logout {
+    margin-top: 0;
+}
+
+.pizza-menu-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+}
+
+.pizza-item {
+    width: 240px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.pizza-item:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.pizza-item-img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    background: var(--surface-muted);
+}
+
+.pizza-item-body {
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.pizza-item-name {
+    font-weight: 600;
+    color: var(--text);
+    font-size: 0.98rem;
+}
+
+.pizza-item-price {
+    color: var(--accent-dark);
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.pizza-item-btn {
+    margin-top: 8px;
+    width: 100%;
+}
+
+.pizza-orders {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--text-soft);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.pizza-orders.empty {
+    list-style: none;
+    padding-left: 0;
+    color: var(--muted);
+    font-style: italic;
+}
+
 /* =========================
    CSRF feladat
    ========================= */
