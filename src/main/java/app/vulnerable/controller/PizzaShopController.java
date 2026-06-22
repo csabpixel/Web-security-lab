@@ -24,6 +24,9 @@ public class PizzaShopController {
 
     private static final Map<String, List<String>> ORDERS = new ConcurrentHashMap<>();
 
+    private static final List<Map<String, Object>> FEEDBACK =
+            Collections.synchronizedList(new ArrayList<>());
+
     private static final List<Map<String, Object>> MENU = List.of(
             menuItem("mexikoi",       "Mexikói Pizza",       "pizza",  3500, "/images/pizza&drink/Mexikói.png"),
             menuItem("egyiptomos",    "Egyiptomos Pizza",    "pizza",  4200, "/images/pizza&drink/Egyiptomos.png"),
@@ -147,6 +150,36 @@ public class PizzaShopController {
         result.put("message", "Rendelve: " + item.get("name"));
         result.put("balance", balance);
         result.put("item", item);
+        return result;
+    }
+
+
+    @GetMapping("/feedback")
+    public List<Map<String, Object>> feedbackList() {
+        return new ArrayList<>(FEEDBACK);
+    }
+
+    @PostMapping("/feedback")
+    public Map<String, Object> feedbackAdd(@RequestBody Map<String, String> req, HttpSession session) {
+        String username = (String) session.getAttribute("pizzaUser");
+        Map<String, Object> result = new LinkedHashMap<>();
+        if (username == null) {
+            result.put("success", false);
+            result.put("message", "Nincs bejelentkezve.");
+            return result;
+        }
+        String text = req.getOrDefault("text", "");
+        if (text == null || text.trim().isEmpty()) {
+            result.put("success", false);
+            result.put("message", "Üres visszajelzés.");
+            return result;
+        }
+        Map<String, Object> entry = new LinkedHashMap<>();
+        entry.put("username", username);
+        entry.put("text", text);
+        FEEDBACK.add(entry);
+        result.put("success", true);
+        result.put("message", "Visszajelzés elküldve.");
         return result;
     }
 }

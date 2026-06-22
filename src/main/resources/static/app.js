@@ -430,6 +430,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         pizzaLoadMenu();
         pizzaRefreshBalance();
+        pizzaLoadFeedback();
     }
 
     const pizzaBalanceEl = document.getElementById("pizzaBalance");
@@ -520,6 +521,62 @@ document.addEventListener("DOMContentLoaded", () => {
                 pizzaOrderStatus.className = "pizza-status error";
             }
         }
+    }
+
+    const pizzaFeedbackText = document.getElementById("pizzaFeedbackText");
+    const pizzaFeedbackBtn = document.getElementById("pizzaFeedbackBtn");
+    const pizzaFeedbackStatus = document.getElementById("pizzaFeedbackStatus");
+    const pizzaFeedbackList = document.getElementById("pizzaFeedbackList");
+
+    async function pizzaLoadFeedback() {
+        if (!pizzaFeedbackList) return;
+        try {
+            const res = await fetch("/api/pizza/feedback");
+            const items = await res.json();
+            if (!items || items.length === 0) {
+                pizzaFeedbackList.innerHTML =
+                    `<div class="pizza-feedback-empty">(még nincs visszajelzés)</div>`;
+                return;
+            }
+            pizzaFeedbackList.innerHTML = items.map(it => `
+                <div class="pizza-feedback-item">
+                    <span class="pizza-feedback-author">${escapeHtml(String(it.username || "?"))}:</span>
+                    ${it.text}
+                </div>
+            `).join("");
+        } catch (e) { }
+    }
+
+    if (pizzaFeedbackBtn) {
+        pizzaFeedbackBtn.addEventListener("click", async () => {
+            const text = pizzaFeedbackText.value;
+            if (!text || !text.trim()) {
+                pizzaFeedbackStatus.textContent = "Üres visszajelzés.";
+                pizzaFeedbackStatus.className = "pizza-status error";
+                return;
+            }
+            pizzaFeedbackStatus.textContent = "Küldés...";
+            pizzaFeedbackStatus.className = "pizza-status";
+            try {
+                const res = await fetch("/api/pizza/feedback", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ text })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    pizzaFeedbackStatus.textContent = "Elküldve. (Jelentkezz ki — a payload az áldozatnál sül el, nem nálad.)";
+                    pizzaFeedbackStatus.className = "pizza-status success";
+                    pizzaFeedbackText.value = "";
+                } else {
+                    pizzaFeedbackStatus.textContent = data.message || "Sikertelen.";
+                    pizzaFeedbackStatus.className = "pizza-status error";
+                }
+            } catch (e) {
+                pizzaFeedbackStatus.textContent = "Hálózati hiba: " + e.message;
+                pizzaFeedbackStatus.className = "pizza-status error";
+            }
+        });
     }
 
     function pizzaShowLoggedOut() {
