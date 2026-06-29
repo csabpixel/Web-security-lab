@@ -635,6 +635,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    const pizzaResetBtn = document.getElementById("pizzaResetBtn");
+    if (pizzaResetBtn) {
+        pizzaResetBtn.addEventListener("click", async () => {
+            try {
+                await fetch("/api/pizza/reset", { method: "POST" });
+                await pizzaRefreshBalance();
+            } catch (e) { }
+        });
+    }
+
     if (pizzaLoginPass) {
         pizzaLoginPass.addEventListener("keypress", (e) => {
             if (e.key === "Enter") pizzaLoginBtn.click();

@@ -543,8 +543,34 @@ button.accent {
     margin-bottom: 8px;
 }
 
+.pizza-balance-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
 .pizza-logout {
     margin-top: 0;
+}
+
+.pizza-reset {
+    margin-top: 0;
+    background: var(--surface-muted);
+    color: var(--accent-dark);
+    border: 1px solid var(--border-strong);
+}
+
+.pizza-reset:hover {
+    background: var(--accent-soft);
+}
+
+.pizza-task-panel .panel-body p {
+    margin: 0 0 8px;
+}
+
+.pizza-task-panel .panel-body p:last-child {
+    margin-bottom: 0;
 }
 
 .pizza-menu-grid {

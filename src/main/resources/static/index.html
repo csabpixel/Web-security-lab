@@ -698,8 +698,8 @@
                     <div class="panel-body">
                         <p>Próbafelhasználók:</p>
                         <ul class="pizza-users">
-                            <li><code>xyz</code> / jelszó: <code>xyz123</code> — normál felhasználó (áldozat)</li>
-                            <li><code>hacker</code> / jelszó: <code>hacker123</code> — támadó</li>
+                            <li><code>peti</code> / jelszó: <code>pizza123</code> — normál vendég (áldozat)</li>
+                            <li><code>eva</code> / jelszó: <code>eva2024</code> — támadó</li>
                         </ul>
 
                         <label for="pizzaLoginUser" class="pizza-label">Felhasználónév</label>
@@ -725,9 +725,23 @@
                     <div class="pizza-balance-box">
                         <span class="pizza-balance-label">Egyenleg</span>
                         <span class="pizza-balance-value"><span id="pizzaBalance">—</span> Ft</span>
-                        <button id="pizzaLogoutBtn" class="pizza-btn pizza-logout">Kijelentkezés</button>
+                        <div class="pizza-balance-actions">
+                            <button id="pizzaResetBtn" class="pizza-btn pizza-reset">Visszaállítás</button>
+                            <button id="pizzaLogoutBtn" class="pizza-btn pizza-logout">Kijelentkezés</button>
+                        </div>
                     </div>
                 </div>
+
+                <section class="panel pizza-task-panel">
+                    <div class="panel-header">
+                        <h3>Feladat</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>Az oldal a rendeléseket egy egyszerű GET kéréssel intézi</p>
+                        <p><code>/api/pizza/order?item=...</code></p>
+                        <p>Az oldalon <b>stored xss</b> sérükénység van. Hajts végre ezzel egy rendelés is a másik felhasználó számára.</p>
+                    </div>
+                </section>
 
                 <section class="panel">
                     <div class="panel-header">
@@ -781,4 +795,4 @@
 
 <script src="app.js"></script>
 </body>
-</html>
+</html>                                  

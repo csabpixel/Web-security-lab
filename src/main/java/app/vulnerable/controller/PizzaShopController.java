@@ -12,8 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PizzaShopController {
 
     private static final Map<String, String> USERS = Map.of(
-            "xyz",    "xyz123",
-            "hacker", "hacker123"
+            "peti", "pizza123",
+            "eva",  "eva2024"
     );
 
     private static final int INITIAL_BALANCE = 10000;
@@ -94,6 +94,24 @@ public class PizzaShopController {
     @GetMapping("/menu")
     public List<Map<String, Object>> menu() {
         return MENU;
+    }
+
+    @PostMapping("/reset")
+    public Map<String, Object> reset(HttpSession session) {
+        String username = (String) session.getAttribute("pizzaUser");
+        Map<String, Object> result = new LinkedHashMap<>();
+        if (username == null) {
+            result.put("success", false);
+            result.put("message", "Nincs bejelentkezve.");
+            return result;
+        }
+        BALANCES.put(username, INITIAL_BALANCE);
+        ORDERS.put(username, new ArrayList<>());
+        result.put("success", true);
+        result.put("message", "Egyenleg visszaállítva " + INITIAL_BALANCE + " Ft-ra, rendelések törölve.");
+        result.put("balance", INITIAL_BALANCE);
+        result.put("orders", new ArrayList<>());
+        return result;
     }
 
     @GetMapping("/balance")
