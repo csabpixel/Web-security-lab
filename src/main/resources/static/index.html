@@ -22,6 +22,7 @@
             <button class="main-tab" data-main-tab="tasksSection">SQLi feladatok</button>
             <button class="main-tab" data-main-tab="csrfSection">CSRF</button>
             <button class="main-tab" data-main-tab="csrfTaskMainSection">CSRF feladat</button>
+            <button class="main-tab" data-main-tab="burpSection">Burp Suite</button>
         </nav>
     </header>
 
@@ -790,9 +791,60 @@
             </div>
 
         </section>
+
+        <!-- BURP SUITE -->
+        <section id="burpSection" class="main-section">
+            <div class="hero-card">
+                <div>
+                    <h2>Burp Suite — mi is ez?</h2>
+                    <p>A Burp Suite egy webalkalmazás-biztonsági eszköz, ami közé áll a böngésződ és a szerver közé (proxy). Így minden HTTP kérést és választ látsz, elkaphatsz, módosíthatsz és újraküldhetsz — vagyis nem csak azt látod, amit az oldal mutatni akar, hanem <strong>az egész alatta futó forgalmat</strong>.</p>
+                </div>
+            </div>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <h3>Mire jó?</h3>
+                </div>
+                <div class="panel-body">
+                    <p>A Burp Suite fő eszközei:</p>
+                    <p>• <strong>Proxy</strong> — elkapja a kéréseket, megnézheted a headerek, cookie-k, body tartalmát.</p>
+                    <p>• <strong>Repeater</strong> — újraküldheted a kéréseket módosított paraméterekkel (pl. cseréld a user ID-t másra, nézd mi lesz).</p>
+                    <p>• <strong>Intruder</strong> — automatizált támadás egy paraméter-listával (pl. jelszó brute-force).</p>
+                    <p>• <strong>Decoder</strong> — Base64, URL, hex kódolás/dekódolás.</p>
+                    <p>• <strong>Scanner</strong> — automatikus sebezhetőség-detektálás (csak Professional).</p>
+                </div>
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <h3>Feladat — Rejtett debug mód</h3>
+                </div>
+                <div class="panel-body">
+                    <p>Van egy endpoint a szerveren: <code>GET /api/burp/task</code>. Egy sima böngészőben megnyitva egy szokványos választ látsz — a body-ban csak egy hint van, hogy „ha lenne debug módod, láthatnál még valamit".</p>
+                    <p><strong>Feladat:</strong> küldj el egy kérést az endpoint-ra úgy, hogy hozzáadsz egy egyedi request headert: <code>X-Debug-Mode: true</code>. Ekkor a szerver egy <code>secret</code> mezőben visszaadja a flaget. Másold ki és illeszd be alább.</p>
+                    <p><strong>Miért kell ehhez Burp Suite?</strong> A böngésző top-level navigációja (URL-t beírsz) nem enged custom headert. Burp Suite Repeater-e viszont pár klikkel bármit átír és újraküld.</p>
+
+                    <p class="csrf-task-step"><strong>A célzott végpont:</strong></p>
+                    <p class="csrf-task-step-row">
+                        <a class="csrf-task-link" href="/api/burp/task" target="_blank">
+                            /api/burp/task
+                        </a>
+                    </p>
+                    <p class="csrf-task-hint">Nyisd meg egyszer sima böngészőben — látod, hogy nincs benne flag. Aztán küldd Burp Suite-tal a header hozzáadásával.</p>
+
+                    <label for="burpFlagInput" class="pizza-label">Flag:</label>
+                    <input type="text" id="burpFlagInput" class="pizza-input" placeholder="Pl: XXXX-YYYY-2024">
+
+                    <button id="burpCheckBtn" class="pizza-btn">Ellenőrzés</button>
+
+                    <p id="burpStatus" class="pizza-status"></p>
+                </div>
+            </section>
+
+        </section>
     </main>
 </div>
 
 <script src="app.js"></script>
 </body>
-</html>                                  
+</html>

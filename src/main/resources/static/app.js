@@ -789,6 +789,38 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("hashchange", syncFromHash);
     syncFromHash();
 
+    // Burp Suite
+
+    const burpCheckBtn = document.getElementById("burpCheckBtn");
+    const burpFlagInput = document.getElementById("burpFlagInput");
+    const burpStatus = document.getElementById("burpStatus");
+
+    if (burpCheckBtn) {
+        burpCheckBtn.addEventListener("click", async () => {
+            const flag = burpFlagInput.value.trim();
+            if (!flag) {
+                burpStatus.textContent = "Írj be egy flaget.";
+                burpStatus.className = "pizza-status error";
+                return;
+            }
+            burpStatus.textContent = "Ellenőrzés...";
+            burpStatus.className = "pizza-status";
+            try {
+                const res = await fetch("/api/burp/check", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ flag })
+                });
+                const data = await res.json();
+                burpStatus.textContent = data.message || "";
+                burpStatus.className = "pizza-status " + (data.success ? "success" : "error");
+            } catch (e) {
+                burpStatus.textContent = "Hálózati hiba: " + e.message;
+                burpStatus.className = "pizza-status error";
+            }
+        });
+    }
+
     // SEGÉD
 
     function escapeHtml(text) {
