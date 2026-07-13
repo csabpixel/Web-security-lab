@@ -40,4 +40,20 @@ public class BurpController {
                 : "Nem stimmel — próbáld újra Burp Suite-tal.");
         return result;
     }
+
+    private static final String CORRECT_PIN = "37";
+
+    @GetMapping("/pin")
+    public Map<String, Object> pin(@RequestParam(value = "code", defaultValue = "") String code) {
+        Map<String, Object> result = new LinkedHashMap<>();
+        if (CORRECT_PIN.equals(code)) {
+            result.put("success", true);
+            result.put("message", "Helyes PIN! Belépve az admin felületre.");
+            result.put("flag", "BURP-PIN-" + CORRECT_PIN);
+        } else {
+            result.put("success", false);
+            result.put("message", "Rossz kód.");
+        }
+        return result;
+    }
 }

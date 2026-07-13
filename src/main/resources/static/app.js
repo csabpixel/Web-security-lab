@@ -821,6 +821,39 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Burp Suite Intruder — PIN ellenőrzés
+
+    const burpPinInput = document.getElementById("burpPinInput");
+    const burpPinCheckBtn = document.getElementById("burpPinCheckBtn");
+    const burpPinStatus = document.getElementById("burpPinStatus");
+
+    if (burpPinCheckBtn) {
+        burpPinCheckBtn.addEventListener("click", async () => {
+            const pin = (burpPinInput.value || "").trim();
+            if (!pin) {
+                burpPinStatus.textContent = "Írj be egy PIN-t.";
+                burpPinStatus.className = "pizza-status error";
+                return;
+            }
+            burpPinStatus.textContent = "Ellenőrzés...";
+            burpPinStatus.className = "pizza-status";
+            try {
+                const res = await fetch("/api/burp/pin?code=" + encodeURIComponent(pin));
+                const data = await res.json();
+                if (data.success) {
+                    burpPinStatus.textContent = (data.message || "Sikerült!") + " Flag: " + (data.flag || "");
+                    burpPinStatus.className = "pizza-status success";
+                } else {
+                    burpPinStatus.textContent = data.message || "Rossz PIN.";
+                    burpPinStatus.className = "pizza-status error";
+                }
+            } catch (e) {
+                burpPinStatus.textContent = "Hálózati hiba: " + e.message;
+                burpPinStatus.className = "pizza-status error";
+            }
+        });
+    }
+
     // SEGÉD
 
     function escapeHtml(text) {
