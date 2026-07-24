@@ -872,15 +872,20 @@
                     <div class="panel-body">
                         <p>A PIN-ellenőrző endpoint:</p>
                         <p class="csrf-task-step-row">
-                            <a class="csrf-task-link" href="/api/burp/pin?code=1234" target="_blank">
-                                /api/burp/pin?code=1234
+                            <a class="csrf-task-link" href="/api/burp/pin?code=25" target="_blank">
+                                /api/burp/pin?code=25
                             </a>
                         </p>
-                        <p class="csrf-task-hint">Próbáld ki tetszőleges 4-jegyű számmal — látod, hogy hibás esetben rövid „Rossz kód." választ ad. A helyes esetben egy jóval hosszabb JSON jön, benne a flag.</p>
-                        <p><strong>Feladat:</strong> Intruder-rel próbáld végig az összes lehetséges PIN-t, majd a megtalált értéket írd be az alábbi mezőbe.</p>
+                        <p class="csrf-task-hint">A helyes szám 1 és 50 között van, és <strong>a te session-ödhöz tartozik</strong> — új számot bármikor generálhatsz alul a gombbal.</p>
 
-                        <label for="burpPinInput" class="pizza-label">Megtalált PIN:</label>
-                        <input type="text" id="burpPinInput" class="pizza-input" placeholder="Pl: 1234" maxlength="4">
+                        <p><strong>Fontos:</strong> a támadó eszköz (Burp Suite) és ez a lap ugyanabban a session-ben kell legyen (közös JSESSIONID). Ehhez a legegyszerűbb, ha ezt a lapot is <em>Burp beépített böngészőjében</em> nyitod meg (Proxy → Open browser), és onnan indítod a támadást.</p>
+
+                        <p><strong>Feladat:</strong> Intruder-rel próbáld végig az 1-50 közötti számokat, majd a megtalált értéket írd be az alábbi mezőbe.</p>
+
+                        <button id="burpPinResetBtn" class="pizza-btn">Új szám generálása</button>
+
+                        <label for="burpPinInput" class="pizza-label">Megtalált szám:</label>
+                        <input type="text" id="burpPinInput" class="pizza-input" placeholder="Pl: 37" maxlength="2">
 
                         <button id="burpPinCheckBtn" class="pizza-btn">Ellenőrzés</button>
 

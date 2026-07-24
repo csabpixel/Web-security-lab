@@ -826,6 +826,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const burpPinInput = document.getElementById("burpPinInput");
     const burpPinCheckBtn = document.getElementById("burpPinCheckBtn");
     const burpPinStatus = document.getElementById("burpPinStatus");
+    const burpPinResetBtn = document.getElementById("burpPinResetBtn");
+
+    if (burpPinResetBtn) {
+        burpPinResetBtn.addEventListener("click", async () => {
+            burpPinStatus.textContent = "Új szám generálása...";
+            burpPinStatus.className = "pizza-status";
+            try {
+                const res = await fetch("/api/burp/pin/reset", { method: "POST" });
+                const data = await res.json();
+                burpPinStatus.textContent = data.message || "Új szám generálva.";
+                burpPinStatus.className = "pizza-status success";
+                if (burpPinInput) burpPinInput.value = "";
+            } catch (e) {
+                burpPinStatus.textContent = "Hálózati hiba: " + e.message;
+                burpPinStatus.className = "pizza-status error";
+            }
+        });
+    }
 
     if (burpPinCheckBtn) {
         burpPinCheckBtn.addEventListener("click", async () => {
