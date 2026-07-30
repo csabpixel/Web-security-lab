@@ -504,6 +504,41 @@ button.accent {
     color: var(--danger);
 }
 
+.mode-switch {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 16px 0 4px 0;
+    padding: 10px 14px;
+    background: #F6EEE0;
+    border: 1px solid #E4D3B4;
+    border-radius: 8px;
+}
+
+.mode-switch-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.mode-switch-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    font-size: 0.92rem;
+    color: var(--text-soft);
+    user-select: none;
+}
+
+.mode-switch-toggle input[type="radio"] {
+    accent-color: #7A4F2E;
+    cursor: pointer;
+}
+
 .pizza-status.success {
     color: var(--success);
 }

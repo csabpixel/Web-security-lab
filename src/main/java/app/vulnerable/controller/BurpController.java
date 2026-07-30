@@ -44,6 +44,7 @@ public class BurpController {
     private static final String PIN_SESSION_KEY = "burpPin";
     private static final String PIN_FAILS_KEY = "burpPinFails";
     private static final String PIN_LOCKOUT_KEY = "burpPinLockoutUntil";
+    private static final String PIN_MODE_KEY = "burpPinMode";
 
     private static final int DELAY_START_AT = 3;
     private static final int LOCKOUT_THRESHOLD = 8;
@@ -64,29 +65,37 @@ public class BurpController {
             jakarta.servlet.http.HttpSession session) {
         Map<String, Object> result = new LinkedHashMap<>();
 
-        Long lockoutUntil = (Long) session.getAttribute(PIN_LOCKOUT_KEY);
-        if (lockoutUntil != null) {
-            if (System.currentTimeMillis() < lockoutUntil) {
-                long remaining = (lockoutUntil - System.currentTimeMillis()) / 1000 + 1;
-                result.put("success", false);
-                result.put("locked", true);
-                result.put("message", "Túl sok sikertelen próbálkozás. Várj még " + remaining + " másodpercet.");
-                return result;
-            } else {
-                session.removeAttribute(PIN_LOCKOUT_KEY);
-                session.removeAttribute(PIN_FAILS_KEY);
-            }
-        }
+        String mode = (String) session.getAttribute(PIN_MODE_KEY);
+        if (mode == null) mode = "hard";
+        boolean hardMode = "hard".equals(mode);
 
-        Integer fails = (Integer) session.getAttribute(PIN_FAILS_KEY);
-        if (fails == null) fails = 0;
-        if (fails >= DELAY_START_AT) {
-            long delayMs = (fails - DELAY_START_AT + 1) * 500L;
-            try {
-                Thread.sleep(delayMs);
+        Integer fails = 0;
+
+        if (hardMode) {
+            Long lockoutUntil = (Long) session.getAttribute(PIN_LOCKOUT_KEY);
+            if (lockoutUntil != null) {
+                if (System.currentTimeMillis() < lockoutUntil) {
+                    long remaining = (lockoutUntil - System.currentTimeMillis()) / 1000 + 1;
+                    result.put("success", false);
+                    result.put("locked", true);
+                    result.put("message", "Túl sok sikertelen próbálkozás. Várj még " + remaining + " másodpercet.");
+                    return result;
+                } else {
+                    session.removeAttribute(PIN_LOCKOUT_KEY);
+                    session.removeAttribute(PIN_FAILS_KEY);
+                }
             }
-            catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+
+            fails = (Integer) session.getAttribute(PIN_FAILS_KEY);
+            if (fails == null) fails = 0;
+            if (fails >= DELAY_START_AT) {
+                long delayMs = (fails - DELAY_START_AT + 1) * 500L;
+                try {
+                    Thread.sleep(delayMs);
+                }
+                catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
 
@@ -104,21 +113,53 @@ public class BurpController {
         } catch (NumberFormatException e) {
         }
 
-        fails++;
-        session.setAttribute(PIN_FAILS_KEY, fails);
+        if (hardMode) {
+            fails++;
+            session.setAttribute(PIN_FAILS_KEY, fails);
 
-        if (fails >= LOCKOUT_THRESHOLD) {
-            session.setAttribute(PIN_LOCKOUT_KEY,
-                    System.currentTimeMillis() + LOCKOUT_SECONDS * 1000L);
+            if (fails >= LOCKOUT_THRESHOLD) {
+                session.setAttribute(PIN_LOCKOUT_KEY,
+                        System.currentTimeMillis() + LOCKOUT_SECONDS * 1000L);
+                result.put("success", false);
+                result.put("locked", true);
+                result.put("message", "Túl sok sikertelen próbálkozás. " + LOCKOUT_SECONDS + " másodperces zárolás.");
+                return result;
+            }
+
             result.put("success", false);
-            result.put("locked", true);
-            result.put("message", "Túl sok sikertelen próbálkozás. " + LOCKOUT_SECONDS + " másodperces zárolás.");
+            result.put("attempts", fails);
+            result.put("message", "Rossz kód. (" + fails + "/" + LOCKOUT_THRESHOLD + " próbálkozás)");
             return result;
         }
 
         result.put("success", false);
-        result.put("attempts", fails);
-        result.put("message", "Rossz kód. (" + fails + "/" + LOCKOUT_THRESHOLD + " próbálkozás)");
+        result.put("message", "Rossz kód.");
+        return result;
+    }
+
+    @GetMapping("/pin/mode")
+    public Map<String, Object> pinModeGet(jakarta.servlet.http.HttpSession session) {
+        String mode = (String) session.getAttribute(PIN_MODE_KEY);
+        if (mode == null) mode = "hard";
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("mode", mode);
+        return result;
+    }
+
+    @PostMapping("/pin/mode")
+    public Map<String, Object> pinModeSet(@RequestBody Map<String, String> req,
+                                          jakarta.servlet.http.HttpSession session) {
+        String requested = req.getOrDefault("mode", "hard");
+        String mode = "easy".equals(requested) ? "easy" : "hard";
+        session.setAttribute(PIN_MODE_KEY, mode);
+        session.removeAttribute(PIN_FAILS_KEY);
+        session.removeAttribute(PIN_LOCKOUT_KEY);
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("success", true);
+        result.put("mode", mode);
+        result.put("message", "easy".equals(mode)
+                ? "Sima mód aktív — nincs késleltetés, nincs zárolás."
+                : "Nehéz mód aktív — késleltetés és zárolás bekapcsolva.");
         return result;
     }
 

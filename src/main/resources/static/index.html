@@ -882,6 +882,18 @@
 
                         <p><strong>Feladat:</strong> Intruder-rel próbáld végig az 1-50 közötti számokat, majd a megtalált értéket írd be az alábbi mezőbe.</p>
 
+                        <div class="mode-switch">
+                            <span class="mode-switch-label">Nehézség:</span>
+                            <label class="mode-switch-toggle">
+                                <input type="radio" name="burpPinMode" value="easy" id="burpPinModeEasy">
+                                <span>Sima (nincs védelem)</span>
+                            </label>
+                            <label class="mode-switch-toggle">
+                                <input type="radio" name="burpPinMode" value="hard" id="burpPinModeHard" checked>
+                                <span>Nehéz (késleltetés + zárolás)</span>
+                            </label>
+                        </div>
+
                         <button id="burpPinResetBtn" class="pizza-btn">Új szám generálása</button>
 
                         <label for="burpPinInput" class="pizza-label">Megtalált szám:</label>

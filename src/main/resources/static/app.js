@@ -827,6 +827,51 @@ document.addEventListener("DOMContentLoaded", () => {
     const burpPinCheckBtn = document.getElementById("burpPinCheckBtn");
     const burpPinStatus = document.getElementById("burpPinStatus");
     const burpPinResetBtn = document.getElementById("burpPinResetBtn");
+    const burpPinModeEasy = document.getElementById("burpPinModeEasy");
+    const burpPinModeHard = document.getElementById("burpPinModeHard");
+
+    (async () => {
+        try {
+            const res = await fetch("/api/burp/pin/mode");
+            const data = await res.json();
+            if (data.mode === "easy" && burpPinModeEasy) {
+                burpPinModeEasy.checked = true;
+            } else if (burpPinModeHard) {
+                burpPinModeHard.checked = true;
+            }
+        } catch (e) {  }
+    })();
+
+    async function setBurpPinMode(mode) {
+        try {
+            const res = await fetch("/api/burp/pin/mode", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ mode })
+            });
+            const data = await res.json();
+            if (burpPinStatus) {
+                burpPinStatus.textContent = data.message || "Mód beállítva.";
+                burpPinStatus.className = "pizza-status success";
+            }
+        } catch (e) {
+            if (burpPinStatus) {
+                burpPinStatus.textContent = "Hálózati hiba: " + e.message;
+                burpPinStatus.className = "pizza-status error";
+            }
+        }
+    }
+
+    if (burpPinModeEasy) {
+        burpPinModeEasy.addEventListener("change", () => {
+            if (burpPinModeEasy.checked) setBurpPinMode("easy");
+        });
+    }
+    if (burpPinModeHard) {
+        burpPinModeHard.addEventListener("change", () => {
+            if (burpPinModeHard.checked) setBurpPinMode("hard");
+        });
+    }
 
     if (burpPinResetBtn) {
         burpPinResetBtn.addEventListener("click", async () => {
