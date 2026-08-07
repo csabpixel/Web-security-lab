@@ -23,6 +23,7 @@
             <button class="main-tab" data-main-tab="csrfSection">CSRF</button>
             <button class="main-tab" data-main-tab="csrfTaskMainSection">CSRF feladat</button>
             <button class="main-tab" data-main-tab="burpSection">Burp Suite</button>
+            <button class="main-tab" data-main-tab="hydraSection">Hydra</button>
         </nav>
     </header>
 
@@ -906,6 +907,45 @@
                 </section>
             </section>
 
+        </section>
+
+        <!-- HYDRA SZEKCIÓ -->
+        <section id="hydraSection" class="main-section">
+            <div class="hero-card">
+                <div>
+                    <h2>Hydra — mi is ez?</h2>
+                    <p>A Hydra egy olyan program, ami gyorsan végigpróbál sok jelszót egy oldalon, amíg meg nem találja a helyeset. Ehhez kap egy szótár-fájlt, amiben soronként egy-egy lehetséges jelszó van, és sorra elküldi őket a szervernek.</p>
+                </div>
+            </div>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <h3>Mit kell csinálnod?</h3>
+                </div>
+                <div class="panel-body">
+                    <p>A szervernek van egy admin fiókja. A felhasználónevet tudod — <strong>admin</strong> —, a jelszót nem. A jelszó egy 30 jelszót tartalmazó listából van kiválasztva, és a te dolgod, hogy Hydra segítségével kitaláld melyik az.</p>
+                    <p>A menete röviden:</p>
+                    <p>1. Telepítsd a Hydra-t (ha még nincs), töltsd le a szótárat.</p>
+                    <p>2. Futtasd a Hydra-t — pár másodperc alatt kiírja a helyes jelszót.</p>
+                    <p>3. Írd be ide, és nézd meg, hogy tényleg működik-e.</p>
+                </div>
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <h3>A megtalált jelszó</h3>
+                </div>
+                <div class="panel-body">
+                    <button id="hydraResetBtn" class="pizza-btn">Új jelszó generálása</button>
+
+                    <label for="hydraPasswordInput" class="pizza-label">Megtalált jelszó:</label>
+                    <input type="text" id="hydraPasswordInput" class="pizza-input" placeholder="Pl: password123">
+
+                    <button id="hydraCheckBtn" class="pizza-btn">Ellenőrzés</button>
+
+                    <p id="hydraStatus" class="pizza-status"></p>
+                </div>
+            </section>
         </section>
     </main>
 </div>

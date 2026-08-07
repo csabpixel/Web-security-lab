@@ -917,6 +917,64 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // HYDRA
+
+    const hydraResetBtn = document.getElementById("hydraResetBtn");
+    const hydraPasswordInput = document.getElementById("hydraPasswordInput");
+    const hydraCheckBtn = document.getElementById("hydraCheckBtn");
+    const hydraStatus = document.getElementById("hydraStatus");
+
+    if (hydraResetBtn) {
+        hydraResetBtn.addEventListener("click", async () => {
+            hydraStatus.textContent = "Új jelszó generálása...";
+            hydraStatus.className = "pizza-status";
+            try {
+                const res = await fetch("/api/hydra/reset", { method: "POST" });
+                const data = await res.json();
+                hydraStatus.textContent = data.message || "Új jelszó generálva.";
+                hydraStatus.className = "pizza-status success";
+                if (hydraPasswordInput) hydraPasswordInput.value = "";
+            } catch (e) {
+                hydraStatus.textContent = "Hálózati hiba: " + e.message;
+                hydraStatus.className = "pizza-status error";
+            }
+        });
+    }
+
+    if (hydraCheckBtn) {
+        hydraCheckBtn.addEventListener("click", async () => {
+            const pw = (hydraPasswordInput.value || "").trim();
+            if (!pw) {
+                hydraStatus.textContent = "Írj be egy jelszót.";
+                hydraStatus.className = "pizza-status error";
+                return;
+            }
+            hydraStatus.textContent = "Ellenőrzés...";
+            hydraStatus.className = "pizza-status";
+            try {
+                const body = new URLSearchParams();
+                body.append("username", "admin");
+                body.append("password", pw);
+                const res = await fetch("/api/hydra/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: body.toString()
+                });
+                const data = await res.json();
+                if (data.success) {
+                    hydraStatus.textContent = (data.message || "Sikerült!") + " Flag: " + (data.flag || "");
+                    hydraStatus.className = "pizza-status success";
+                } else {
+                    hydraStatus.textContent = data.message || "Hibás jelszó.";
+                    hydraStatus.className = "pizza-status error";
+                }
+            } catch (e) {
+                hydraStatus.textContent = "Hálózati hiba: " + e.message;
+                hydraStatus.className = "pizza-status error";
+            }
+        });
+    }
+
     // SEGÉD
 
     function escapeHtml(text) {
