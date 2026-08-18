@@ -914,36 +914,151 @@
             <div class="hero-card">
                 <div>
                     <h2>Hydra — mi is ez?</h2>
-                    <p>A Hydra egy olyan program, ami gyorsan végigpróbál sok jelszót egy oldalon, amíg meg nem találja a helyeset. Ehhez kap egy szótár-fájlt, amiben soronként egy-egy lehetséges jelszó van, és sorra elküldi őket a szervernek.</p>
+                    <p>A Hydra olyan, mint egy türelmes robot, aki egymás után beírja egy weboldal login mezőjébe az összes jelszót, amit adsz neki — másodpercenként akár ezret is. Nekünk csak annyi a dolgunk, hogy megadjunk neki egy jelszó-listát, és megvárjuk amíg megtalálja a jót.</p>
+                    <p class="hydra-easy-only">Sima módban a felhasználónevet tudjuk (<strong>admin</strong>), csak a jelszavát kell kitalálni. A jelszó egy 30 elemű listából való.</p>
+                    <p class="hydra-hard-only">Nehéz módban 5 különböző felhasználó van, mind saját random jelszóval — a neveiket sem tudjuk, és <strong>csak 1 fiók aktív</strong>, a többi zárolt. Először ki kell derítenünk kik léteznek, aztán mindegyiknek feltörni a jelszavát, és sorra belépni náluk amíg meg nem találjuk az aktív fiókot.</p>
                 </div>
+            </div>
+
+            <div class="mode-switch">
+                <span class="mode-switch-label">Nehézség:</span>
+                <label class="mode-switch-toggle">
+                    <input type="radio" name="hydraMode" value="easy" id="hydraModeEasy" checked>
+                    <span>Sima — csak jelszót kell kitalálni</span>
+                </label>
+                <label class="mode-switch-toggle">
+                    <input type="radio" name="hydraMode" value="hard" id="hydraModeHard">
+                    <span>Nehéz — user + jelszó, mind ismeretlen</span>
+                </label>
             </div>
 
             <section class="panel">
                 <div class="panel-header">
-                    <h3>Mit kell csinálnod?</h3>
+                    <h3>1. lépés — Szerezd meg a Hydra-t</h3>
                 </div>
                 <div class="panel-body">
-                    <p>A szervernek van egy admin fiókja. A felhasználónevet tudod — <strong>admin</strong> —, a jelszót nem. A jelszó egy 30 jelszót tartalmazó listából van kiválasztva, és a te dolgod, hogy Hydra segítségével kitaláld melyik az.</p>
-                    <p>A menete röviden:</p>
-                    <p>1. Telepítsd a Hydra-t (ha még nincs), töltsd le a szótárat.</p>
-                    <p>2. Futtasd a Hydra-t — pár másodperc alatt kiírja a helyes jelszót.</p>
-                    <p>3. Írd be ide, és nézd meg, hogy tényleg működik-e.</p>
+                    <p>A Hydra Linuxra készült program. Windowson a WSL (Ubuntu) alrendszerben tudod futtatni. Nyisd meg az Ubuntu terminált, és írd be:</p>
+                    <p><code>sudo apt update &amp;&amp; sudo apt install hydra</code></p>
                 </div>
             </section>
 
             <section class="panel">
                 <div class="panel-header">
-                    <h3>A megtalált jelszó</h3>
+                    <h3>2. lépés — Töltsd le a listákat</h3>
                 </div>
                 <div class="panel-body">
-                    <button id="hydraResetBtn" class="pizza-btn">Új jelszó generálása</button>
+                    <p>A jelszó-szótár, amiből a szerver választott:</p>
+                    <p><a class="csrf-task-link" href="/api/hydra/wordlist" target="_blank">/api/hydra/wordlist</a> — mentsd <code>wordlist.txt</code> néven</p>
+                    <p class="hydra-hard-only">És egy felhasználónév-lista, amiben az 5 valódi fiók megvan:</p>
+                    <p class="hydra-hard-only"><a class="csrf-task-link" href="/api/hydra/users" target="_blank">/api/hydra/users</a> — mentsd <code>users.txt</code> néven</p>
+                </div>
+            </section>
 
-                    <label for="hydraPasswordInput" class="pizza-label">Megtalált jelszó:</label>
-                    <input type="text" id="hydraPasswordInput" class="pizza-input" placeholder="Pl: password123">
+            <section class="panel hydra-hard-only">
+                <div class="panel-header">
+                    <h3>3. lépés — Derítsd ki, kik a valódi felhasználók</h3>
+                </div>
+                <div class="panel-body">
+                    <p>A szerver elárul egy fontos dolgot: ha nem létező névvel próbálsz belépni, „Ismeretlen felhasználó" hibát ír. Ha viszont a név létezik és csak a jelszó rossz, akkor „Hibás jelszó"-t. Ebből a különbségből ki tudjuk deríteni ki létezik és ki nem — még mielőtt a jelszóval foglalkoznánk.</p>
+                    <p>Hydra-nak odaadjuk a users.txt-t, és megnézzük melyik névnél <strong>nem</strong> jön „Ismeretlen felhasználó". Azok a valódi fiókok. A Hydra azt fogja mondani hogy „valid password found", de ez most nem a jelszó megtalálását jelenti — csak azt hogy létező felhasználót találtunk.</p>
+                </div>
+            </section>
 
-                    <button id="hydraCheckBtn" class="pizza-btn">Ellenőrzés</button>
+            <section class="panel">
+                <div class="panel-header">
+                    <h3 class="hydra-easy-only">3. lépés — Az admin jelszavának feltörése</h3>
+                    <h3 class="hydra-hard-only">4. lépés — A jelszavak feltörése</h3>
+                </div>
+                <div class="panel-body">
+                    <p class="hydra-easy-only">Hydra végigpróbálja a wordlist.txt összes jelszavát az admin fiókon. Pár másodperc alatt megtalálja a jót — zöld sorban kiírja.</p>
+                    <p class="hydra-hard-only">Miután megvannak a valódi felhasználók, mindegyikre külön Hydra futást indítunk a wordlist.txt-vel. Öt user × 30 jelszó = pár másodperc alatt megvan mindegyik jelszava. A cél, hogy megtaláld <strong>az aktív fiókot</strong> — bárki lehet közülük, előre nem tudod. A többi 4 fiók zárolva van; a jelszó jó, de belépéskor „zárolva" hibát fogsz látni.</p>
+                    <p>Ha megvannak, jöhet a bejelentkezés lent.</p>
+                </div>
+            </section>
+
+            <section class="panel">
+                <div class="panel-header">
+                    <h3 class="hydra-easy-only">4. lépés — Jelentkezz be</h3>
+                    <h3 class="hydra-hard-only">5. lépés — Jelentkezz be</h3>
+                </div>
+                <div class="panel-body">
+                    <p class="hydra-easy-only">Írd be az admin nevet és a Hydra által talált jelszót. Sikerre megkapod a flaget.</p>
+                    <p class="hydra-hard-only">Írd be sorra a talált user-jelszó párokat. Amelyiknél megjelenik a flag, az volt az aktív fiók. A többi 4-nél „zárolva" hibát kapsz — a jelszó jó, csak a fiók nem használható.</p>
+
+                    <button id="hydraResetBtn" class="pizza-btn">
+                        <span class="hydra-easy-only">Új jelszó generálása</span>
+                        <span class="hydra-hard-only">Új felhasználók és jelszavak</span>
+                    </button>
+
+                    <label for="hydraUserInput" class="pizza-label">Felhasználónév:</label>
+                    <input type="text" id="hydraUserInput" class="pizza-input" placeholder="pl. admin">
+
+                    <label for="hydraPasswordInput" class="pizza-label">Jelszó:</label>
+                    <input type="password" id="hydraPasswordInput" class="pizza-input" placeholder="A Hydra által kiírt jelszó">
+                    <label class="password-show-toggle">
+                        <input type="checkbox" id="hydraPasswordToggle">
+                        <span>Jelszó mutatása</span>
+                    </label>
+
+                    <button id="hydraCheckBtn" class="pizza-btn">Bejelentkezés</button>
 
                     <p id="hydraStatus" class="pizza-status"></p>
+
+                    <div id="hydraDashboard" class="hydra-dashboard" hidden>
+                        <div class="hydra-dashboard-header">
+                            <span class="hydra-dashboard-badge">Admin panel</span>
+                            <span class="hydra-dashboard-user">Bejelentkezve: <strong id="hydraDashboardUser"></strong></span>
+                            <button id="hydraLogoutBtn" class="hydra-logout-btn">Kijelentkezés</button>
+                        </div>
+                        <div class="hydra-dashboard-body">
+                            <p>Üdv az admin felületen! Sikeresen feltörted a jelszót.</p>
+                            <p class="hydra-flag-line">Flag: <span id="hydraDashboardFlag"></span></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="panel help-card">
+                <div class="panel-header">
+                    <h3>Segítség</h3>
+                </div>
+                <div class="panel-body">
+                    <details class="help-pill hydra-hard-only">
+                        <summary class="help-pill-summary">Felhasználók kiderítése</summary>
+                        <div class="help-pill-body">
+                            <p>Ehhez így épül fel a Hydra parancs:</p>
+                            <p>• <code>hydra</code> — a program neve</p>
+                            <p>• <code>-L users.txt</code> — a felhasználónév-lista (nagy L, mert lista; kis l egyetlen konkrét név lenne)</p>
+                            <p>• <code>-p barmit</code> — egyetlen tetszőleges jelszó (itt tényleg mindegy mit írsz, a lényeg a névre válasz)</p>
+                            <p>• a szerver címe és <code>-s 8080</code> a port</p>
+                            <p>• <code>http-post-form</code> — a modul, amivel form-mal jelentkezünk be</p>
+                            <p>• http-post-form string három része, kettőspontokkal:</p>
+                            <p>&nbsp;&nbsp;&nbsp;- az endpoint útvonala: <code>/api/hydra/login</code></p>
+                            <p>&nbsp;&nbsp;&nbsp;- a body: <code>username=^USER^&amp;password=^PASS^</code></p>
+                            <p>&nbsp;&nbsp;&nbsp;- a hibaszó: <code>Ismeretlen</code> — ha ezt látja a válaszban, akkor a név nem létezik</p>
+                            <p>Ne lepődj meg amikor Hydra „valid password found"-ot ír — itt nem a jelszót találtuk meg, csak azt hogy a felhasználó létezik.</p>
+                        </div>
+                    </details>
+
+                    <details class="help-pill">
+                        <summary class="help-pill-summary">Jelszó megtalálása</summary>
+                        <div class="help-pill-body">
+                            <p class="hydra-easy-only">A Hydra parancs sima módban:</p>
+                            <p class="hydra-hard-only">Minden felhasználóra egyenként futtatod le. Így épül fel a Hydra parancs:</p>
+                            <p>• <code>hydra</code> — a program neve</p>
+                            <p class="hydra-easy-only">• <code>-l admin</code> — a fix felhasználónév</p>
+                            <p class="hydra-hard-only">• <code>-l NÉV</code> — egy konkrét felhasználónév (kis l, mert egy név). Cseréld ki az előző fázisban talált nevekre sorra.</p>
+                            <p>• <code>-P wordlist.txt</code> — a jelszó-lista (nagy P, mert lista)</p>
+                            <p>• a szerver címe és <code>-s 8080</code> a port</p>
+                            <p>• <code>http-post-form</code></p>
+                            <p>• http-post-form string:</p>
+                            <p>&nbsp;&nbsp;&nbsp;- endpoint: <code>/api/hydra/login</code></p>
+                            <p>&nbsp;&nbsp;&nbsp;- body: <code>username=^USER^&amp;password=^PASS^</code></p>
+                            <p>&nbsp;&nbsp;&nbsp;- hibaszó: <code>Hibás</code> — ha ezt látja, akkor a jelszó rossz</p>
+                            <p>• <code>-V</code> — hogy lásd a folyamatot közben</p>
+                            <p class="hydra-hard-only">A trükk: az előző körhöz képest most <code>-L</code> helyett <code>-l</code>, <code>-p</code> helyett <code>-P</code>, és a hibaszó „Ismeretlen"-ről „Hibás"-ra változik.</p>
+                        </div>
+                    </details>
                 </div>
             </section>
         </section>

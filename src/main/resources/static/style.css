@@ -539,6 +539,151 @@ button.accent {
     cursor: pointer;
 }
 
+.hydra-mode-hint {
+    font-size: 0.9rem;
+    color: var(--text-soft);
+    margin: 8px 0;
+}
+
+.hydra-dashboard {
+    margin-top: 20px;
+    border: 1px solid #C9A66B;
+    border-radius: 10px;
+    background: #FBF5E9;
+    overflow: hidden;
+}
+
+.hydra-dashboard-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: #5C3A21;
+    color: #FBF5E9;
+}
+
+.hydra-dashboard-badge {
+    background: #C9A66B;
+    color: #3A2010;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.hydra-dashboard-user {
+    flex: 1;
+    font-size: 0.9rem;
+}
+
+.hydra-logout-btn {
+    background: transparent;
+    border: 1px solid #FBF5E9;
+    color: #FBF5E9;
+    padding: 4px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.hydra-logout-btn:hover {
+    background: #FBF5E9;
+    color: #5C3A21;
+}
+
+.hydra-dashboard-body {
+    padding: 16px 18px;
+}
+
+.hydra-flag-line {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: #FDF3D9;
+    border-left: 4px solid #C9A66B;
+    font-family: Consolas, monospace;
+    font-size: 0.95rem;
+    color: #5C3A21;
+    border-radius: 4px;
+}
+
+.help-pill {
+    background: #FBF5E9;
+    border: 1px solid #E4D3B4;
+    border-radius: 999px;
+    overflow: hidden;
+    transition: border-radius 0.15s ease;
+}
+
+.help-pill[open] {
+    border-radius: 14px;
+}
+
+.help-pill-summary {
+    padding: 12px 22px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #7A4F2E;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    list-style: none;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.help-pill-summary::-webkit-details-marker {
+    display: none;
+}
+
+.help-pill-summary::before {
+    content: "+";
+    font-size: 1.3rem;
+    font-weight: 400;
+    color: #7A4F2E;
+    line-height: 1;
+    transition: transform 0.15s ease;
+    display: inline-block;
+}
+
+.help-pill[open] .help-pill-summary::before {
+    content: "−";
+}
+
+.help-pill-summary:hover {
+    background: #F3E8CE;
+}
+
+.help-pill-body {
+    padding: 4px 22px 16px 22px;
+}
+
+.password-show-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    cursor: pointer;
+    color: var(--text-soft);
+    font-size: 0.88rem;
+    user-select: none;
+}
+
+.password-show-toggle input[type="checkbox"] {
+    accent-color: #7A4F2E;
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+
+/* Nehézségi mód szerinti megjelenítés a Hydra tabon */
+#hydraSection.mode-easy .hydra-hard-only { display: none !important; }
+#hydraSection.mode-hard .hydra-easy-only { display: none !important; }
+
+
 .pizza-status.success {
     color: var(--success);
 }

@@ -920,9 +920,100 @@ document.addEventListener("DOMContentLoaded", () => {
     // HYDRA
 
     const hydraResetBtn = document.getElementById("hydraResetBtn");
+    const hydraUserInput = document.getElementById("hydraUserInput");
     const hydraPasswordInput = document.getElementById("hydraPasswordInput");
     const hydraCheckBtn = document.getElementById("hydraCheckBtn");
     const hydraStatus = document.getElementById("hydraStatus");
+    const hydraDashboard = document.getElementById("hydraDashboard");
+    const hydraDashboardUser = document.getElementById("hydraDashboardUser");
+    const hydraDashboardFlag = document.getElementById("hydraDashboardFlag");
+    const hydraLogoutBtn = document.getElementById("hydraLogoutBtn");
+    const hydraPasswordToggle = document.getElementById("hydraPasswordToggle");
+    const hydraSection = document.getElementById("hydraSection");
+    const hydraModeEasy = document.getElementById("hydraModeEasy");
+    const hydraModeHard = document.getElementById("hydraModeHard");
+
+    function applyHydraMode(mode) {
+        if (!hydraSection) return;
+        hydraSection.classList.toggle("mode-easy", mode !== "hard");
+        hydraSection.classList.toggle("mode-hard", mode === "hard");
+    }
+
+    (async () => {
+        try {
+            const res = await fetch("/api/hydra/mode");
+            const data = await res.json();
+            const mode = data.mode === "hard" ? "hard" : "easy";
+            if (mode === "hard" && hydraModeHard) hydraModeHard.checked = true;
+            else if (hydraModeEasy) hydraModeEasy.checked = true;
+            applyHydraMode(mode);
+        } catch (e) {
+            applyHydraMode("easy");
+        }
+    })();
+
+    async function setHydraMode(mode) {
+        try {
+            const res = await fetch("/api/hydra/mode", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ mode })
+            });
+            const data = await res.json();
+            applyHydraMode(data.mode);
+            if (hydraStatus) {
+                hydraStatus.textContent = data.message || "Mód beállítva.";
+                hydraStatus.className = "pizza-status success";
+            }
+            hideHydraDashboard();
+        } catch (e) {
+            if (hydraStatus) {
+                hydraStatus.textContent = "Hálózati hiba: " + e.message;
+                hydraStatus.className = "pizza-status error";
+            }
+        }
+    }
+
+    if (hydraModeEasy) {
+        hydraModeEasy.addEventListener("change", () => {
+            if (hydraModeEasy.checked) setHydraMode("easy");
+        });
+    }
+    if (hydraModeHard) {
+        hydraModeHard.addEventListener("change", () => {
+            if (hydraModeHard.checked) setHydraMode("hard");
+        });
+    }
+
+    if (hydraPasswordToggle && hydraPasswordInput) {
+        hydraPasswordToggle.addEventListener("change", () => {
+            hydraPasswordInput.type = hydraPasswordToggle.checked ? "text" : "password";
+        });
+    }
+
+    function showHydraDashboard(username, flag) {
+        if (!hydraDashboard) return;
+        hydraDashboardUser.textContent = username;
+        hydraDashboardFlag.textContent = flag;
+        hydraDashboard.hidden = false;
+    }
+
+    function hideHydraDashboard() {
+        if (!hydraDashboard) return;
+        hydraDashboard.hidden = true;
+    }
+
+    if (hydraLogoutBtn) {
+        hydraLogoutBtn.addEventListener("click", () => {
+            hideHydraDashboard();
+            if (hydraStatus) {
+                hydraStatus.textContent = "Kijelentkezve.";
+                hydraStatus.className = "pizza-status";
+            }
+            if (hydraUserInput) hydraUserInput.value = "";
+            if (hydraPasswordInput) hydraPasswordInput.value = "";
+        });
+    }
 
     if (hydraResetBtn) {
         hydraResetBtn.addEventListener("click", async () => {
@@ -933,7 +1024,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = await res.json();
                 hydraStatus.textContent = data.message || "Új jelszó generálva.";
                 hydraStatus.className = "pizza-status success";
+                if (hydraUserInput) hydraUserInput.value = "";
                 if (hydraPasswordInput) hydraPasswordInput.value = "";
+                hideHydraDashboard();
             } catch (e) {
                 hydraStatus.textContent = "Hálózati hiba: " + e.message;
                 hydraStatus.className = "pizza-status error";
@@ -943,17 +1036,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (hydraCheckBtn) {
         hydraCheckBtn.addEventListener("click", async () => {
+            const user = (hydraUserInput.value || "").trim();
             const pw = (hydraPasswordInput.value || "").trim();
-            if (!pw) {
-                hydraStatus.textContent = "Írj be egy jelszót.";
+            if (!user || !pw) {
+                hydraStatus.textContent = "Írd be a felhasználónevet és a jelszót.";
                 hydraStatus.className = "pizza-status error";
                 return;
             }
-            hydraStatus.textContent = "Ellenőrzés...";
+            hydraStatus.textContent = "Bejelentkezés...";
             hydraStatus.className = "pizza-status";
             try {
                 const body = new URLSearchParams();
-                body.append("username", "admin");
+                body.append("username", user);
                 body.append("password", pw);
                 const res = await fetch("/api/hydra/login", {
                     method: "POST",
@@ -962,11 +1056,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
                 const data = await res.json();
                 if (data.success) {
-                    hydraStatus.textContent = (data.message || "Sikerült!") + " Flag: " + (data.flag || "");
+                    hydraStatus.textContent = data.message || "Sikeres belépés.";
                     hydraStatus.className = "pizza-status success";
+                    showHydraDashboard(user, data.flag || "— (nem admin, nincs flag)");
                 } else {
-                    hydraStatus.textContent = data.message || "Hibás jelszó.";
+                    hydraStatus.textContent = data.error || data.message || "Hibás jelszó.";
                     hydraStatus.className = "pizza-status error";
+                    hideHydraDashboard();
                 }
             } catch (e) {
                 hydraStatus.textContent = "Hálózati hiba: " + e.message;
