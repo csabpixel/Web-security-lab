@@ -246,10 +246,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     `).join("");
                 }
 
-                task2Result.innerHTML = `
-                    <p><strong>${escapeHtml(data.message)}</strong></p>
-                    <p>Konstruált SQL: <code>${escapeHtml(data.constructedSql || "")}</code></p>
-                `;
+                let html = `<p><strong>${escapeHtml(data.message)}</strong></p>`;
+                html += `<p>Konstruált SQL: <code>${escapeHtml(data.constructedSql || "")}</code></p>`;
+                task2Result.innerHTML = html;
+                task2Result.classList.toggle("hit", !!data.success);
                 task2Status.textContent = "Kész";
             } catch (e) {
                 task2Status.textContent = "Hiba: " + e.message;
@@ -257,12 +257,40 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // FELADAT 3 — Numeric
+    // FELADAT 3
 
     const task3Btn = document.getElementById("task3Btn");
     const task3Input = document.getElementById("task3Input");
     const task3ResultsBody = document.getElementById("task3ResultsBody");
     const task3Status = document.getElementById("task3Status");
+    const task3Result = document.getElementById("task3Result");
+
+    // FELADAT 4 — sqlmap verifikáció
+    const task4Btn = document.getElementById("task4Btn");
+    const task4Input = document.getElementById("task4Input");
+    const task4Status = document.getElementById("task4Status");
+    const task4Result = document.getElementById("task4Result");
+
+    if (task4Btn) {
+        task4Btn.addEventListener("click", async () => {
+            task4Status.textContent = "Ellenőrzés...";
+            try {
+                const res = await fetch("/api/sqli/tasks/sqlmap-verify", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ input: task4Input.value })
+                });
+                const data = await res.json();
+
+                let html = `<p><strong>${escapeHtml(data.message)}</strong></p>`;
+                task4Result.innerHTML = html;
+                task4Result.classList.toggle("hit", !!data.success);
+                task4Status.textContent = "Kész";
+            } catch (e) {
+                task4Status.textContent = "Hiba: " + e.message;
+            }
+        });
+    }
 
     if (task3Btn) {
         task3Btn.addEventListener("click", async () => {
@@ -276,16 +304,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = await res.json();
 
                 if (!data.results || data.results.length === 0) {
-                    task3ResultsBody.innerHTML = `<tr><td colspan="2" class="empty">Nincs találat.</td></tr>`;
+                    task3ResultsBody.innerHTML = `<tr><td colspan="3" class="empty">Nincs találat.</td></tr>`;
                 } else {
                     task3ResultsBody.innerHTML = data.results.map(r => `
                         <tr>
                             <td>${escapeHtml(String(r.col1 ?? ""))}</td>
                             <td>${escapeHtml(String(r.col2 ?? ""))}</td>
+                            <td>${escapeHtml(String(r.col3 ?? ""))}</td>
                         </tr>
                     `).join("");
                 }
 
+                let html = `<p><strong>${escapeHtml(data.message)}</strong></p>`;
+                html += `<p>Konstruált SQL: <code>${escapeHtml(data.constructedSql || "")}</code></p>`;
+                task3Result.innerHTML = html;
+                task3Result.classList.toggle("hit", !!data.success);
                 task3Status.textContent = "Kész";
             } catch (e) {
                 task3Status.textContent = "Hiba: " + e.message;

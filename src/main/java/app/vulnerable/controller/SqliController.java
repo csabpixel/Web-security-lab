@@ -6,6 +6,8 @@ import app.vulnerable.dto.BlindTimeRequest;
 import app.vulnerable.dto.BlindTimeResponse;
 import app.vulnerable.dto.SearchRequest;
 import app.vulnerable.dto.SearchResponse;
+import app.vulnerable.model.ApiKey;
+import app.vulnerable.repository.ApiKeyRepository;
 import app.vulnerable.service.SqliService;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +19,11 @@ import java.util.*;
 public class SqliController {
 
     private final SqliService service;
+    private final ApiKeyRepository apiKeyRepository;
 
-    public SqliController(SqliService service) {
+    public SqliController(SqliService service, ApiKeyRepository apiKeyRepository) {
         this.service = service;
+        this.apiKeyRepository = apiKeyRepository;
     }
 
     @PostMapping("/search")
@@ -143,7 +147,8 @@ public class SqliController {
     @PostMapping("/tasks/products")
     public Map<String, Object> taskProductSearch(@RequestBody ProductSearchRequest request) {
         Map<String, Object> response = new LinkedHashMap<>();
-        response.put("constructedSql", service.buildProductSearchSql(request.input()));
+        String sql = service.buildProductSearchSql(request.input());
+        response.put("constructedSql", sql);
 
         try {
             List<Object[]> rows = service.vulnerableProductSearch(request.input());
@@ -156,11 +161,20 @@ public class SqliController {
                 results.add(item);
             }
 
+            String sqlUpper = sql.toUpperCase();
+            boolean taskCompleted = sqlUpper.contains("UNION") && sqlUpper.contains("USERS");
+
             response.put("count", results.size());
             response.put("results", results);
-            response.put("message", results.isEmpty()
-                    ? "Nincs találat."
-                    : results.size() + " találat.");
+            if (taskCompleted && !results.isEmpty()) {
+                response.put("success", true);
+                response.put("message", "Sikeres SQL injection! Kiszivárogtak a users tábla adatai. A feladat teljesítve.");
+            } else {
+                response.put("success", false);
+                response.put("message", results.isEmpty()
+                        ? "Nincs találat."
+                        : results.size() + " találat de még nem szivárogtattad ki a users tábla adatait.");
+            }
         } catch (Exception e) {
             response.put("count", 0);
             response.put("results", new ArrayList<>());
@@ -177,7 +191,8 @@ public class SqliController {
     @PostMapping("/tasks/price-search")
     public Map<String, Object> task3(@RequestBody Task3Request request) {
         Map<String, Object> response = new LinkedHashMap<>();
-        response.put("constructedSql", service.buildTask3Sql(request.input()));
+        String sql = service.buildTask3Sql(request.input());
+        response.put("constructedSql", sql);
 
         try {
             List<Object[]> rows = service.vulnerableTask3(request.input());
@@ -191,11 +206,20 @@ public class SqliController {
                 results.add(item);
             }
 
+            String sqlUpper = sql.toUpperCase();
+            boolean taskCompleted = sqlUpper.contains("CREDIT_CARDS");
+
             response.put("count", results.size());
             response.put("results", results);
-            response.put("message", results.isEmpty()
-                    ? "Nincs találat."
-                    : results.size() + " találat.");
+            if (taskCompleted && !results.isEmpty()) {
+                response.put("success", true);
+                response.put("message", "Sikeres SQL injection! Megtaláltad a rejtett credit_cards tábla adatait. A feladat teljesítve.");
+            } else {
+                response.put("success", false);
+                response.put("message", results.isEmpty()
+                        ? "Nincs találat."
+                        : results.size() + " találat a rejtett táblát még nem találtad meg.");
+            }
         } catch (Exception e) {
             response.put("count", 0);
             response.put("results", new ArrayList<>());
@@ -205,7 +229,32 @@ public class SqliController {
         return response;
     }
 
-    //  Negyedik feladat (SQLI) — sqlmap
+    //  Negyedik feladat (SQLI)
+
+    public record SqlmapVerifyRequest(String input) {}
+
+    @PostMapping("/tasks/sqlmap-verify")
+    public Map<String, Object> sqlmapVerify(@RequestBody SqlmapVerifyRequest request) {
+        Map<String, Object> response = new LinkedHashMap<>();
+        String input = request.input() == null ? "" : request.input().trim();
+
+        List<ApiKey> allKeys = apiKeyRepository.findAll();
+        Optional<ApiKey> match = allKeys.stream()
+                .filter(k -> k.getApiKey().equalsIgnoreCase(input)
+                        || k.getServiceName().equalsIgnoreCase(input))
+                .findFirst();
+
+        if (match.isPresent()) {
+            ApiKey found = match.get();
+            response.put("success", true);
+            response.put("message", "Sikeres SQL injection! Az sqlmap-el megszerezted a(z) "
+                    + found.getServiceName() + " API kulcsát: " + found.getApiKey() + ". A feladat teljesítve.");
+        } else {
+            response.put("success", false);
+            response.put("message", "Ez nem egyezik meg egy api_keys tábla adataival. Próbáld sqlmap-el kideríteni.");
+        }
+        return response;
+    }
 
     @GetMapping("/sqlmap/products")
     public Map<String, Object> sqlmapTarget(@RequestParam(value = "id", defaultValue = "1") String id) {

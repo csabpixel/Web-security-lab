@@ -536,16 +536,19 @@
                             <table>
                                 <thead>
                                 <tr>
-                                    <th>col1 (ID)</th>
-                                    <th>col2 (Név)</th>
+                                    <th>col1</th>
+                                    <th>col2</th>
+                                    <th>col3</th>
                                 </tr>
                                 </thead>
                                 <tbody id="task3ResultsBody">
                                 <tr>
-                                    <td colspan="2" class="empty">Még nincs keresés.</td>
+                                    <td colspan="3" class="empty">Még nincs keresés.</td>
                                 </tr>
                                 </tbody>
                             </table>
+
+                            <div id="task3Result" class="result-box" style="margin-top: 12px;">Konstruált SQL itt fog megjelenni.</div>
                         </div>
                     </section>
                 </div>
@@ -567,6 +570,23 @@
                     <div class="panel-body">
                         <p>Próbáld ki előbb <a href="/api/sqli/sqlmap/products?id=1" target="_blank"><code>http://localhost:8080/api/sqli/sqlmap/products?id=1</code></a> — működik a böngészőben is, és JSON-ban adja vissza a terméket.</p>
                         <p>Háttérben: <code>SELECT id, name, price FROM products WHERE id = $id</code> — numerikus injection-pont.</p>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <div class="panel-header">
+                        <h3>Beküldés</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p>Miután sqlmap-pel megszerezted az <code>api_keys</code> tábla tartalmát, írd ide a megtalált API kulcsot (vagy a szolgáltatás nevét). Ha helyes, sikerüzenet jön.</p>
+
+                        <label for="task4Input">API kulcs</label>
+                        <input type="text" id="task4Input" placeholder="Pl: abc123">
+
+                        <button id="task4Btn">Ellenőrzés</button>
+
+                        <div id="task4Status" class="status-bar">Várakozás...</div>
+                        <div id="task4Result" class="result-box" style="margin-top: 12px;">Az sqlmap eredménye itt fog megjelenni.</div>
                     </div>
                 </section>
 
