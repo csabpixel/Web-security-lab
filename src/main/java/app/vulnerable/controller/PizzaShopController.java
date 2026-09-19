@@ -177,6 +177,34 @@ public class PizzaShopController {
         return new ArrayList<>(FEEDBACK);
     }
 
+    @PostMapping("/verify")
+    public Map<String, Object> verifyAttack() {
+        Map<String, Object> result = new LinkedHashMap<>();
+
+        boolean maliciousFeedback = FEEDBACK.stream()
+                .map(f -> String.valueOf(f.get("text")).toLowerCase())
+                .anyMatch(text -> (text.contains("<script") || text.contains("onerror") || text.contains("onload"))
+                        && text.contains("/api/pizza/order"));
+
+        boolean drainedBalance = BALANCES.values().stream()
+                .anyMatch(bal -> bal != null && bal < 10000);
+
+        if (maliciousFeedback && drainedBalance) {
+            result.put("success", true);
+            result.put("message", "A feladat teljesítve.");
+        } else if (maliciousFeedback && !drainedBalance) {
+            result.put("success", false);
+            result.put("message", "A feedback tartalmaz XSS payload-ot, de még nem futott le.");
+        } else if (drainedBalance && !maliciousFeedback) {
+            result.put("success", false);
+            result.put("message", "Egy egyenleg csökkent, de nem stored XSS-en keresztül.");
+        } else {
+            result.put("success", false);
+            result.put("message", "Még nincs sikeres támadás.");
+        }
+        return result;
+    }
+
     @PostMapping("/feedback")
     public Map<String, Object> feedbackAdd(@RequestBody Map<String, String> req, HttpSession session) {
         String username = (String) session.getAttribute("pizzaUser");

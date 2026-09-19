@@ -558,6 +558,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const pizzaFeedbackText = document.getElementById("pizzaFeedbackText");
     const pizzaFeedbackBtn = document.getElementById("pizzaFeedbackBtn");
+    const pizzaVerifyBtn = document.getElementById("pizzaVerifyBtn");
+    const pizzaVerifyStatus = document.getElementById("pizzaVerifyStatus");
+    const pizzaVerifyResult = document.getElementById("pizzaVerifyResult");
+
+    if (pizzaVerifyBtn) {
+        pizzaVerifyBtn.addEventListener("click", async () => {
+            pizzaVerifyStatus.textContent = "Ellenőrzés...";
+            try {
+                const res = await fetch("/api/pizza/verify", { method: "POST" });
+                const data = await res.json();
+
+                let html = `<p><strong>${escapeHtml(data.message)}</strong></p>`;
+                pizzaVerifyResult.innerHTML = html;
+                pizzaVerifyResult.classList.toggle("hit", !!data.success);
+                pizzaVerifyStatus.textContent = "Kész";
+            } catch (e) {
+                pizzaVerifyStatus.textContent = "Hiba: " + e.message;
+            }
+        });
+    }
     const pizzaFeedbackStatus = document.getElementById("pizzaFeedbackStatus");
     const pizzaFeedbackList = document.getElementById("pizzaFeedbackList");
 

@@ -693,7 +693,7 @@
                             <p style="color: var(--muted); font-size: 0.85rem; margin-top: 14px;">Ezt látja az áldozat (a böngészője ezt renderelné):</p>
                             <div id="csrfEvilRender" style="border: 1px dashed var(--border-strong); padding: 14px; min-height: 60px; border-radius: var(--radius-md); background: var(--surface-muted); color: var(--text-soft);">(még nincs betöltve)</div>
 
-                            <p style="color: var(--muted); font-size: 0.85rem; margin-top: 14px;">Próbálj más támadó kódokat is — pl. <code>&lt;iframe&gt;</code>-et vagy automatikusan beküldő <code>&lt;form&gt;</code>-ot. A klasszikus <code>&lt;img&gt;</code> trükk azért működik, mert a böngésző azt hiszi, csak egy képet tölt — közben a mysite.com endpoint-ját szólítja meg a te sütiddel.</p>
+                            <p style="color: var(--muted); font-size: 0.85rem; margin-top: 14px;">Próbálj más támadó kódokat is pl. <code>&lt;iframe&gt;</code>-et vagy automatikusan beküldő <code>&lt;form&gt;</code>-ot. A klasszikus <code>&lt;img&gt;</code> trükk azért működik, mert a böngésző azt hiszi, csak egy képet tölt közben a mysite.com endpoint-ját szólítja meg a te sütiddel.</p>
                         </div>
                     </section>
                 </div>
@@ -807,6 +807,10 @@
 
                         <h4 class="pizza-feedback-heading">Mások visszajelzései</h4>
                         <div id="pizzaFeedbackList" class="pizza-feedback-list"></div>
+
+                        <button id="pizzaVerifyBtn" class="pizza-btn" style="margin-top: 16px;">Támadás ellenőrzése</button>
+                        <div id="pizzaVerifyStatus" class="pizza-status"></div>
+                        <div id="pizzaVerifyResult" class="result-box" style="margin-top: 10px;">Klikk „Támadás ellenőrzése" megmondom sikerült-e a stored XSS + CSRF.</div>
                     </div>
                 </section>
             </div>
