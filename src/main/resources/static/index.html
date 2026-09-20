@@ -29,18 +29,18 @@
 
     <main class="page-content">
         <!-- SQLI -->
-        <section id="sqliSection" class="main-section active">
+        <div id="sqliSection" class="main-section active">
             <div class="subnav-wrap">
                 <div class="subnav-title">SQL Injection modul</div>
                 <nav class="sub-nav">
                     <button class="sub-tab active" data-sub-tab="sqliDemo">SQL Injection</button>
-                    <button class="sub-tab" data-sub-tab="blindContentSection">Blind SQLi - Content based</button>
-                    <button class="sub-tab" data-sub-tab="blindTimeSection">Blind SQLi - Time based</button>
+                    <button class="sub-tab" data-sub-tab="blindContentSection">Blind SQLi Content based</button>
+                    <button class="sub-tab" data-sub-tab="blindTimeSection">Blind SQLi Time based</button>
                 </nav>
             </div>
 
             <!-- BASIC SQLI -->
-            <section id="sqliDemo" class="sub-section active">
+            <div id="sqliDemo" class="sub-section active">
                 <div class="hero-card">
                     <div>
                         <h2>SQL Injection</h2>
@@ -48,7 +48,7 @@
                     </div>
                 </div>
 
-                <section class="control-panel">
+                <div class="control-panel">
                     <div class="field">
                         <label for="mode">Mód</label>
                         <select id="mode">
@@ -63,12 +63,12 @@
                     </div>
 
                     <button id="searchBtn">Keresés</button>
-                </section>
+                </div>
 
                 <div class="status-bar" id="status">Várakozás...</div>
 
                 <div class="dashboard-grid">
-                    <section class="panel panel-large">
+                    <div class="panel panel-large">
                         <div class="panel-header">
                             <h3>Eredmények</h3>
                         </div>
@@ -89,29 +89,29 @@
                                 </tbody>
                             </table>
                         </div>
-                    </section>
+                    </div>
 
-                    <section class="panel">
+                    <div class="panel">
                         <div class="panel-header">
                             <h3>Magyarázat</h3>
                         </div>
                         <div class="panel-body" id="explanation">
                             <p>Itt fog megjelenni a magyarázat.</p>
                         </div>
-                    </section>
+                    </div>
                 </div>
-            </section>
+            </div>
 
             <!-- BLIND SQLI - CONTENT BASED -->
-            <section id="blindContentSection" class="sub-section">
+            <div id="blindContentSection" class="sub-section">
                 <div class="hero-card">
                     <div>
-                        <h2>Blind SQL Injection - Content based</h2>
+                        <h2>Blind SQL Injection Content based</h2>
                         <p>A különbség az alkalmazás válaszának tartalmában jelenik meg.</p>
                     </div>
                 </div>
 
-                <section class="control-panel">
+                <div class="control-panel">
                     <div class="field">
                         <label for="blindContentMode">Mód</label>
                         <select id="blindContentMode">
@@ -126,41 +126,41 @@
                     </div>
 
                     <button id="blindContentBtn">Vizsgálat</button>
-                </section>
+                </div>
 
                 <div class="status-bar" id="blindContentStatus">Várakozás...</div>
 
                 <div class="dashboard-grid">
-                    <section class="panel panel-large">
+                    <div class="panel panel-large">
                         <div class="panel-header">
                             <h3>Alkalmazás válasza</h3>
                         </div>
                         <div class="panel-body">
                             <div id="blindContentResult" class="result-box">Itt fog megjelenni az eredmény.</div>
                         </div>
-                    </section>
+                    </div>
 
-                    <section class="panel">
+                    <div class="panel">
                         <div class="panel-header">
                             <h3>Magyarázat</h3>
                         </div>
                         <div class="panel-body" id="blindContentExplanation">
                             <p>Itt a különbség az oldal válaszának tartalmában figyelhető meg.</p>
                         </div>
-                    </section>
+                    </div>
                 </div>
-            </section>
+            </div>
 
             <!-- BLIND SQLI - TIME BASED -->
-            <section id="blindTimeSection" class="sub-section">
+            <div id="blindTimeSection" class="sub-section">
                 <div class="hero-card">
                     <div>
-                        <h2>Blind SQL Injection - Time based</h2>
+                        <h2>Blind SQL Injection Time based</h2>
                         <p>A különbség a válaszidőben jelenik meg.</p>
                     </div>
                 </div>
 
-                <section class="control-panel">
+                <div class="control-panel">
                     <div class="field">
                         <label for="blindTimeMode">Mód</label>
                         <select id="blindTimeMode">
@@ -175,34 +175,34 @@
                     </div>
 
                     <button id="blindTimeBtn">Futtatás</button>
-                </section>
+                </div>
 
                 <div class="status-bar" id="blindTimeStatus">Várakozás...</div>
 
                 <div class="dashboard-grid">
-                    <section class="panel panel-large">
+                    <div class="panel panel-large">
                         <div class="panel-header">
                             <h3>Válaszidő és eredmény</h3>
                         </div>
                         <div class="panel-body">
                             <div id="blindTimeResult" class="result-box">Itt fog megjelenni az eredmény.</div>
                         </div>
-                    </section>
+                    </div>
 
-                    <section class="panel">
+                    <div class="panel">
                         <div class="panel-header">
                             <h3>Magyarázat</h3>
                         </div>
                         <div class="panel-body" id="blindTimeExplanation">
                             <p>Itt a különbség a válaszidőben figyelhető meg.</p>
                         </div>
-                    </section>
+                    </div>
                 </div>
-            </section>
-        </section>
+            </div>
+        </div>
 
         <!-- XSS -->
-        <section id="xssSection" class="main-section">
+        <div id="xssSection" class="main-section">
             <div class="subnav-wrap">
                 <div class="subnav-title">XSS modul</div>
                 <nav class="sub-nav">
@@ -213,7 +213,7 @@
             </div>
 
             <!-- Stored -->
-            <section id="storedXssSection" class="sub-section active">
+            <div id="storedXssSection" class="sub-section active">
                 <div class="hero-card">
                     <div>
                         <h2>Stored XSS</h2>
@@ -221,7 +221,7 @@
                     </div>
                 </div>
 
-                <section class="control-panel">
+                <div class="control-panel">
                     <div class="field">
                         <label for="xssMode">Mód</label>
                         <select id="xssMode">
@@ -241,33 +241,33 @@
                     </div>
 
                     <button id="addCommentBtn">Beküldés</button>
-                </section>
+                </div>
 
                 <div class="status-bar" id="xssStatus">Várakozás...</div>
 
                 <div class="dashboard-grid">
-                    <section class="panel panel-large">
+                    <div class="panel panel-large">
                         <div class="panel-header">
                             <h3>Kommentek</h3>
                         </div>
                         <div class="panel-body" id="commentsContainer">
                             <p class="empty">Még nincs komment.</p>
                         </div>
-                    </section>
+                    </div>
 
-                    <section class="panel">
+                    <div class="panel">
                         <div class="panel-header">
                             <h3>Magyarázat</h3>
                         </div>
                         <div class="panel-body" id="xssExplanation">
                             <p>Vulnerable módban a komment HTML-ként jelenik meg, secure módban szövegként.</p>
                         </div>
-                    </section>
+                    </div>
                 </div>
-            </section>
+            </div>
 
             <!-- Reflected -->
-            <section id="reflectedXssSection" class="sub-section">
+            <div id="reflectedXssSection" class="sub-section">
                 <div class="hero-card">
                     <div>
                         <h2>Reflected XSS</h2>
@@ -275,7 +275,7 @@
                     </div>
                 </div>
 
-                <section class="control-panel">
+                <div class="control-panel">
                     <div class="field">
                         <label for="reflectedMode">Mód</label>
                         <select id="reflectedMode">
@@ -290,33 +290,33 @@
                     </div>
 
                     <button id="reflectedBtn">Küldés</button>
-                </section>
+                </div>
 
                 <div class="status-bar" id="reflectedStatus">Várakozás...</div>
 
                 <div class="dashboard-grid">
-                    <section class="panel panel-large">
+                    <div class="panel panel-large">
                         <div class="panel-header">
                             <h3>Válasz</h3>
                         </div>
                         <div class="panel-body">
                             <div id="reflectedResult" class="result-box">Itt fog megjelenni a válasz.</div>
                         </div>
-                    </section>
+                    </div>
 
-                    <section class="panel">
+                    <div class="panel">
                         <div class="panel-header">
                             <h3>Magyarázat</h3>
                         </div>
                         <div class="panel-body" id="reflectedExplanation">
                             <p>A szerver visszaküldi a bemenetet, amit a kliens megjelenít.</p>
                         </div>
-                    </section>
+                    </div>
                 </div>
-            </section>
+            </div>
 
             <!-- DOM -->
-            <section id="domXssSection" class="sub-section">
+            <div id="domXssSection" class="sub-section">
                 <div class="hero-card">
                     <div>
                         <h2>DOM XSS</h2>
@@ -324,7 +324,7 @@
                     </div>
                 </div>
 
-                <section class="control-panel">
+                <div class="control-panel">
                     <div class="field">
                         <label for="domMode">Mód</label>
                         <select id="domMode">
@@ -339,54 +339,54 @@
                     </div>
 
                     <button id="domBtn">Betöltés</button>
-                </section>
+                </div>
 
                 <div class="status-bar" id="domStatus">Várakozás...</div>
 
                 <div class="dashboard-grid">
-                    <section class="panel panel-large">
+                    <div class="panel panel-large">
                         <div class="panel-header">
                             <h3>DOM eredmény</h3>
                         </div>
                         <div class="panel-body">
                             <div id="domResult" class="result-box">Itt fog megjelenni az URL hash-ből kiolvasott tartalom.</div>
                         </div>
-                    </section>
+                    </div>
 
-                    <section class="panel">
+                    <div class="panel">
                         <div class="panel-header">
                             <h3>Magyarázat</h3>
                         </div>
                         <div class="panel-body" id="domExplanation">
                             <p>A tartalom a kliensoldali JavaScriptből kerül a DOM-ba.</p>
                         </div>
-                    </section>
+                    </div>
                 </div>
-            </section>
-        </section>
+            </div>
+        </div>
 
         <!-- SQLI FELADATOK -->
-        <section id="tasksSection" class="main-section">
+        <div id="tasksSection" class="main-section">
             <div class="subnav-wrap">
                 <div class="subnav-title">SQLi feladatok</div>
                 <nav class="sub-nav">
                     <button class="sub-tab active" data-sub-tab="task1Section">Feladat 1</button>
                     <button class="sub-tab" data-sub-tab="task2Section">Feladat 2</button>
                     <button class="sub-tab" data-sub-tab="task3Section">Feladat 3</button>
-                    <button class="sub-tab" data-sub-tab="task4Section">Feladat 4 — sqlmap</button>
+                    <button class="sub-tab" data-sub-tab="task4Section">Feladat 4 sqlmap</button>
                 </nav>
             </div>
 
             <!-- Feladat 1 — Auth bypass -->
-            <section id="task1Section" class="sub-section active">
+            <div id="task1Section" class="sub-section active">
                 <div class="hero-card">
                     <div>
-                        <h2>Feladat 1 — Belépés</h2>
+                        <h2>Feladat 1 Belépés</h2>
                         <p>Lépj be <strong>admin-ként</strong>, de <em>anélkül hogy ismernéd az admin jelszavát</em>. A login form tipikus felhasználónév + jelszó ellenőrzést végez, viszont sérülékeny lekérdezéssel.</p>
                     </div>
                 </div>
 
-                <section class="control-panel">
+                <div class="control-panel">
                     <div class="field flex-grow">
                         <label for="task1User">Felhasználónév</label>
                         <input type="text" id="task1User">
@@ -398,21 +398,21 @@
                     </div>
 
                     <button id="task1Btn">Belépés</button>
-                </section>
+                </div>
 
                 <div class="status-bar" id="task1Status">Várakozás...</div>
 
                 <div class="dashboard-grid">
-                    <section class="panel panel-large">
+                    <div class="panel panel-large">
                         <div class="panel-header">
                             <h3>Eredmény</h3>
                         </div>
                         <div class="panel-body">
                             <div id="task1Result" class="result-box">Próbálj meg belépni admin-ként.</div>
                         </div>
-                    </section>
+                    </div>
 
-                    <section class="panel">
+                    <div class="panel">
                         <div class="panel-header">
                             <h3>Segítség és megoldás</h3>
                         </div>
@@ -429,32 +429,32 @@
                                 <p>Egy másik klasszikus változat: felhasználónév <code>' OR 1=1 --</code>, ami az első találatot adja vissza (általában a legkisebb ID-jú user-t — ez itt az admin).</p>
                             </details>
                         </div>
-                    </section>
+                    </div>
                 </div>
-            </section>
+            </div>
 
             <!-- Feladat 2 — UNION-based extraction -->
-            <section id="task2Section" class="sub-section">
+            <div id="task2Section" class="sub-section">
                 <div class="hero-card">
                     <div>
-                        <h2>Feladat 2 — UNION-based adatkinyerés</h2>
+                        <h2>Feladat 2 UNION-based adatkinyerés</h2>
                         <p>Egy nyilvános termékkereső oszlopokat ad vissza. A háttérben azonban van egy másik tábla (<code>users</code>), amiben a felhasználónevek és jelszavak szerepelnek. <strong>Lopd ki az admin jelszavát</strong> a kereső segítségével.</p>
                     </div>
                 </div>
 
-                <section class="control-panel">
+                <div class="control-panel">
                     <div class="field flex-grow">
                         <label for="task2Input">Keresés</label>
                         <input type="text" id="task2Input">
                     </div>
 
                     <button id="task2Btn">Keresés</button>
-                </section>
+                </div>
 
                 <div class="status-bar" id="task2Status">Várakozás...</div>
 
                 <div class="dashboard-grid">
-                    <section class="panel panel-large">
+                    <div class="panel panel-large">
                         <div class="panel-header">
                             <h3>Találatok</h3>
                         </div>
@@ -474,24 +474,24 @@
                             </table>
                             <div id="task2Result" class="result-box" style="margin-top: 12px;">Konstruált SQL itt fog megjelenni.</div>
                         </div>
-                    </section>
+                    </div>
 
-                    <section class="panel">
+                    <div class="panel">
                         <div class="panel-header">
                             <h3>Segítség és megoldás</h3>
                         </div>
                         <div class="panel-body" id="task2Help">
                             <details class="task-help">
-                                <summary>Segítség 1 — oszlop-szám</summary>
+                                <summary>Segítség 1 oszlop-szám</summary>
                                 <p>A UNION csak akkor működik, ha a két SELECT <strong>ugyanannyi oszlopot</strong> ad vissza. Ezt egy <code>ORDER BY n</code> trükkel deríthetjük ki: ha <code>ORDER BY 2</code> még működik, de <code>ORDER BY 3</code> hibát dob, akkor a query 2 oszlopos.</p>
                             </details>
                             <details class="task-help">
-                                <summary>Segítség 2 — séma feltárás</summary>
+                                <summary>Segítség 2 séma feltárás</summary>
                                 <p>H2-ben (és a legtöbb DB-ben) van egy <code>INFORMATION_SCHEMA</code>, amiből megtudhatod a táblákat és oszlopokat. Pl. <code>' UNION SELECT TABLE_NAME, NULL FROM INFORMATION_SCHEMA.TABLES --</code>.</p>
                                 <p>A <code>users</code> tábla biztosan létezik, és van benne <code>username</code> + <code>password</code> oszlop.</p>
                             </details>
                             <details class="task-help">
-                                <summary>Segítség 3 — típus-kompatibilitás</summary>
+                                <summary>Segítség 3 típus-kompatibilitás</summary>
                                 <p>A UNION-nal egyesített query-knek nem csak <em>oszlopszámban</em>, hanem <em>típusban</em> is illeszkedniük kell. A <code>products.price</code> <code>DOUBLE</code>, a <code>users.password</code> <code>VARCHAR</code> — ezeket nem lehet közvetlenül UNION-olni. Vagy egy <code>NULL</code>-t (ami minden típusra kompatibilis) tegyél a második oszlopba, vagy fűzd össze a username + password szöveget egyetlen oszlopba.</p>
                             </details>
                             <details class="task-help">
@@ -503,12 +503,12 @@
                                 <p>A találati táblában a termékek mellett megjelennek a userek <code>admin:S3cretAdminP@ss</code> formátumban.</p>
                             </details>
                         </div>
-                    </section>
+                    </div>
                 </div>
-            </section>
+            </div>
 
             <!-- Feladat 3 -->
-            <section id="task3Section" class="sub-section">
+            <div id="task3Section" class="sub-section">
                 <div class="hero-card">
                     <div>
                         <h2>Feladat 3</h2>
@@ -516,19 +516,19 @@
                     </div>
                 </div>
 
-                <section class="control-panel">
+                <div class="control-panel">
                     <div class="field flex-grow">
                         <label for="task3Input">Termék neve</label>
                         <input type="text" id="task3Input" placeholder="Pl: Apple">
                     </div>
 
                     <button id="task3Btn">Keresés</button>
-                </section>
+                </div>
 
                 <div class="status-bar" id="task3Status">Várakozás...</div>
 
                 <div class="dashboard-grid">
-                    <section class="panel panel-large">
+                    <div class="panel panel-large">
                         <div class="panel-header">
                             <h3>Találatok</h3>
                         </div>
@@ -550,20 +550,20 @@
 
                             <div id="task3Result" class="result-box" style="margin-top: 12px;">Konstruált SQL itt fog megjelenni.</div>
                         </div>
-                    </section>
+                    </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- Feladat 4 — sqlmap -->
-            <section id="task4Section" class="sub-section">
+            <!-- Feladat 4 sqlmap -->
+            <div id="task4Section" class="sub-section">
                 <div class="hero-card">
                     <div>
-                        <h2>Feladat 4 — SQL injection sqlmap-pel</h2>
+                        <h2>Feladat 4 SQL injection sqlmap-pel</h2>
                         <p>Az <strong>sqlmap</strong> egy automatizált SQLi tool. <strong>A célod: szerezd meg a rejtett <code>api_keys</code> tábla tartalmát</strong> — API kulcsai vannak benne.</p>
                     </div>
                 </div>
 
-                <section class="panel" style="margin-bottom: 16px;">
+                <div class="panel" style="margin-bottom: 16px;">
                     <div class="panel-header">
                         <h3>Célzott végpont</h3>
                     </div>
@@ -571,9 +571,9 @@
                         <p>Próbáld ki előbb <a href="/api/sqli/sqlmap/products?id=1" target="_blank"><code>http://localhost:8080/api/sqli/sqlmap/products?id=1</code></a> — működik a böngészőben is, és JSON-ban adja vissza a terméket.</p>
                         <p>Háttérben: <code>SELECT id, name, price FROM products WHERE id = $id</code> — numerikus injection-pont.</p>
                     </div>
-                </section>
+                </div>
 
-                <section class="panel">
+                <div class="panel">
                     <div class="panel-header">
                         <h3>Beküldés</h3>
                     </div>
@@ -588,10 +588,10 @@
                         <div id="task4Status" class="status-bar">Várakozás...</div>
                         <div id="task4Result" class="result-box" style="margin-top: 12px;">Az sqlmap eredménye itt fog megjelenni.</div>
                     </div>
-                </section>
+                </div>
 
-            </section>
-        </section>
+            </div>
+        </div>
 
         <!-- CSRF -->
         <section id="csrfSection" class="main-section">
@@ -668,10 +668,10 @@
                             <p style="font-size: 0.88rem; color: var(--muted);">Az oldal egyedi titkos kódot (CSRF token) is generál neked, amit a saját formjaiba beszúr: <code id="csrfToken">—</code>. Ezt egy idegen oldal nem tudja kitalálni.</p>
 
                             <h4 style="margin-top: 16px;">Saját email-csere (innen a profil oldalról):</h4>
-                            <div class="control-panel" style="padding: 0; border: none; background: transparent;">
+                            <section class="control-panel" style="padding: 0; border: none; background: transparent;">
                                 <div class="field flex-grow"><label for="csrfLegitEmail">Új email</label><input type="text" id="csrfLegitEmail" placeholder="uj@email.hu" value="uj@email.hu"></div>
                                 <button id="csrfLegitBtn">Mentés</button>
-                            </div>
+                            </section>
 
                             <h4 style="margin-top: 16px;">Hogy változott az email:</h4>
                             <ul id="csrfHistory" style="font-family: ui-monospace,monospace; font-size: 0.85rem; padding-left: 18px;"></ul>
