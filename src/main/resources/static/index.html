@@ -594,7 +594,7 @@
         </div>
 
         <!-- CSRF -->
-        <section id="csrfSection" class="main-section">
+        <div id="csrfSection" class="main-section">
             <div class="subnav-wrap">
                 <div class="subnav-title">CSRF modul</div>
                 <nav class="sub-nav">
@@ -603,7 +603,7 @@
                 </nav>
             </div>
 
-            <section id="csrfIntroSection" class="sub-section active">
+            <div id="csrfIntroSection" class="sub-section active">
                 <div class="hero-card">
                     <div>
                         <h2>Cross-Site Request Forgery (CSRF)</h2>
@@ -612,7 +612,7 @@
                 </div>
 
                 <div class="dashboard-grid">
-                    <section class="panel panel-large">
+                    <div class="panel panel-large">
                         <div class="panel-header">
                             <h3>Hogyan működik?</h3>
                         </div>
@@ -620,9 +620,9 @@
                             <p>A böngésző <strong>minden kérésnél automatikusan rácsatolja a target oldal cookie-ját</strong> — függetlenül attól, melyik oldalról indul a kérés. Ha be vagy jelentkezve a <code>bank.com</code>-ra, és egy másik tabban egy fertőzött oldal egy rejtett <code>&lt;img src="bank.com/transfer?to=hacker&amp;amount=1000"&gt;</code>-et tartalmaz, a böngésződ az utalást is a session cookie-ddal indítja — a bank pedig valódi felhasználói műveletként végrehajtja.(Ez csak egy példa.)</p>
                             <p>Védekezés: <strong>CSRF token</strong> (egyszer-használatos titok, amit cross-site oldal nem tud kitalálni) és <strong>SameSite cookie</strong> (a böngésző nem küldi cross-site kérésnél). A következő tabon élesben végrehajthatsz egy CSRF támadást.</p>
                         </div>
-                    </section>
+                    </div>
 
-                    <section class="panel">
+                    <div class="panel">
                         <div class="panel-header">
                             <h3>XSS vs CSRF</h3>
                         </div>
@@ -630,12 +630,12 @@
                             <p>• <strong>XSS</strong>: kódot futtat a böngésződben → <em>adatot lop</em>.</p>
                             <p>• <strong>CSRF</strong>: téged használ proxy-ként → <em>cselekvést végez a nevedben</em>.</p>
                         </div>
-                    </section>
+                    </div>
                 </div>
-            </section>
+            </div>
 
             <!-- CSRF demó -->
-            <section id="csrfDemoSection" class="sub-section">
+            <div id="csrfDemoSection" class="sub-section">
                 <div class="hero-card">
                     <div>
                         <h2>Csináljunk egy CSRF támadást!</h2>
@@ -644,7 +644,7 @@
                     </div>
                 </div>
 
-                <section class="control-panel">
+                <div class="control-panel">
                     <div class="field">
                         <label for="csrfMode">A védelem be van kapcsolva?</label>
                         <select id="csrfMode">
@@ -653,12 +653,12 @@
                         </select>
                     </div>
                     <button id="csrfResetBtn">Indítás újra (új email + új token)</button>
-                </section>
+                </div>
 
                 <div class="status-bar" id="csrfStatus">Várakozás...</div>
 
                 <div class="dashboard-grid">
-                    <section class="panel">
+                    <div class="panel">
                         <div class="panel-header">
                             <h3>A te fiókod</h3>
                         </div>
@@ -668,17 +668,17 @@
                             <p style="font-size: 0.88rem; color: var(--muted);">Az oldal egyedi titkos kódot (CSRF token) is generál neked, amit a saját formjaiba beszúr: <code id="csrfToken">—</code>. Ezt egy idegen oldal nem tudja kitalálni.</p>
 
                             <h4 style="margin-top: 16px;">Saját email-csere (innen a profil oldalról):</h4>
-                            <section class="control-panel" style="padding: 0; border: none; background: transparent;">
+                            <div class="control-panel" style="padding: 0; border: none; background: transparent;">
                                 <div class="field flex-grow"><label for="csrfLegitEmail">Új email</label><input type="text" id="csrfLegitEmail" placeholder="uj@email.hu" value="uj@email.hu"></div>
                                 <button id="csrfLegitBtn">Mentés</button>
-                            </section>
+                            </div>
 
                             <h4 style="margin-top: 16px;">Hogy változott az email:</h4>
                             <ul id="csrfHistory" style="font-family: ui-monospace,monospace; font-size: 0.85rem; padding-left: 18px;"></ul>
                         </div>
-                    </section>
+                    </div>
 
-                    <section class="panel">
+                    <div class="panel">
                         <div class="panel-header">
                             <h3>A hacker oldala</h3>
                         </div>
@@ -695,14 +695,14 @@
 
                             <p style="color: var(--muted); font-size: 0.85rem; margin-top: 14px;">Próbálj más támadó kódokat is pl. <code>&lt;iframe&gt;</code>-et vagy automatikusan beküldő <code>&lt;form&gt;</code>-ot. A klasszikus <code>&lt;img&gt;</code> trükk azért működik, mert a böngésző azt hiszi, csak egy képet tölt közben a mysite.com endpoint-ját szólítja meg a te sütiddel.</p>
                         </div>
-                    </section>
+                    </div>
                 </div>
-            </section>
+            </div>
 
-        </section>
+        </div>
 
         <!-- CSRF FELADAT -->
-        <section id="csrfTaskMainSection" class="main-section">
+        <div id="csrfTaskMainSection" class="main-section">
 
             <!-- Bejelentkezés -->
             <div id="pizzaLoginView">
@@ -713,7 +713,7 @@
                     </div>
                 </div>
 
-                <section class="panel">
+                <div class="panel">
                     <div class="panel-header">
                         <h3>Bejelentkezés</h3>
                     </div>
@@ -734,7 +734,7 @@
 
                         <div id="pizzaLoginStatus" class="pizza-status"></div>
                     </div>
-                </section>
+                </div>
             </div>
 
             <!-- Belépett nézet -->
@@ -754,7 +754,7 @@
                     </div>
                 </div>
 
-                <section class="panel pizza-task-panel">
+                <div class="panel pizza-task-panel">
                     <div class="panel-header">
                         <h3>Feladat</h3>
                     </div>
@@ -763,27 +763,27 @@
                         <p><code>/api/pizza/order?item=...</code></p>
                         <p>Az oldalon <b>stored xss</b> sérükénység van. Hajts végre ezzel egy rendelés is a másik felhasználó számára.</p>
                     </div>
-                </section>
+                </div>
 
-                <section class="panel">
+                <div class="panel">
                     <div class="panel-header">
                         <h3>Pizzák</h3>
                     </div>
                     <div class="panel-body">
                         <div id="pizzaMenuPizzas" class="pizza-menu-grid"></div>
                     </div>
-                </section>
+                </div>
 
-                <section class="panel">
+                <div class="panel">
                     <div class="panel-header">
                         <h3>Üdítők</h3>
                     </div>
                     <div class="panel-body">
                         <div id="pizzaMenuDrinks" class="pizza-menu-grid"></div>
                     </div>
-                </section>
+                </div>
 
-                <section class="panel">
+                <div class="panel">
                     <div class="panel-header">
                         <h3>Rendeléseid</h3>
                     </div>
@@ -791,9 +791,9 @@
                         <ul id="pizzaOrders" class="pizza-orders"></ul>
                         <p id="pizzaOrderStatus" class="pizza-status"></p>
                     </div>
-                </section>
+                </div>
 
-                <section class="panel">
+                <div class="panel">
                     <div class="panel-header">
                         <h3>Visszajelzések</h3>
                     </div>
@@ -812,32 +812,32 @@
                         <div id="pizzaVerifyStatus" class="pizza-status"></div>
                         <div id="pizzaVerifyResult" class="result-box" style="margin-top: 10px;">Klikk „Támadás ellenőrzése" megmondom sikerült-e a stored XSS + CSRF.</div>
                     </div>
-                </section>
+                </div>
             </div>
 
-        </section>
+        </div>
 
         <!-- BURP SUITE -->
-        <section id="burpSection" class="main-section">
+        <div id="burpSection" class="main-section">
             <div class="subnav-wrap">
                 <div class="subnav-title">Burp Suite modul</div>
                 <nav class="sub-nav">
                     <button class="sub-tab active" data-sub-tab="burpIntroSection">Bevezetés</button>
                     <button class="sub-tab" data-sub-tab="burpHeaderTask">Debug header feladat</button>
-                    <button class="sub-tab" data-sub-tab="burpIntruderTask">Intruder — PIN feltörés</button>
+                    <button class="sub-tab" data-sub-tab="burpIntruderTask">Intruder PIN feltörés</button>
                 </nav>
             </div>
 
             <!-- Bevezetés -->
-            <section id="burpIntroSection" class="sub-section active">
+            <div id="burpIntroSection" class="sub-section active">
                 <div class="hero-card">
                     <div>
-                        <h2>Burp Suite — mi is ez?</h2>
+                        <h2>Burp Suite mi is ez?</h2>
                         <p>A Burp Suite egy webalkalmazás-biztonsági eszköz, ami közé áll a böngésződ és a szerver közé (proxy). Így minden HTTP kérést és választ látsz, elkaphatsz, módosíthatsz és újraküldhetsz — vagyis nem csak azt látod, amit az oldal mutatni akar, hanem <strong>az egész alatta futó forgalmat</strong>.</p>
                     </div>
                 </div>
 
-                <section class="panel">
+                <div class="panel">
                     <div class="panel-header">
                         <h3>Mire jó?</h3>
                     </div>
@@ -849,14 +849,14 @@
                         <p>• <strong>Decoder</strong> — Base64, URL, hex kódolás/dekódolás.</p>
                         <p>• <strong>Scanner</strong> — automatikus sebezhetőség-detektálás (csak Professional).</p>
                     </div>
-                </section>
-            </section>
+                </div>
+            </div>
 
             <!-- Debug header feladat -->
-            <section id="burpHeaderTask" class="sub-section">
-                <section class="panel">
+            <div id="burpHeaderTask" class="sub-section">
+                <div class="panel">
                     <div class="panel-header">
-                        <h3>Feladat — Rejtett debug mód</h3>
+                        <h3>Feladat Rejtett debug mód</h3>
                     </div>
                     <div class="panel-body">
                         <p>Van egy endpoint a szerveren: <code>GET /api/burp/task</code>. Egy sima böngészőben megnyitva egy szokványos választ látsz — a body-ban csak egy hint van, hogy „ha lenne debug módod, láthatnál még valamit".</p>
@@ -878,19 +878,19 @@
 
                         <p id="burpStatus" class="pizza-status"></p>
                     </div>
-                </section>
-            </section>
+                </div>
+            </div>
 
             <!-- Intruder feladat -->
-            <section id="burpIntruderTask" class="sub-section">
+            <div id="burpIntruderTask" class="sub-section">
                 <div class="hero-card">
                     <div>
-                        <h2>Intruder feladat — 2 számjegyű kód feltörés</h2>
+                        <h2>Intruder feladat 2 számjegyű kód feltörés</h2>
                         <p>Egy admin belépő 2 számjegyű PIN-nel védett — mindössze 50 lehetséges kombináció. Burp Suite Intruder modulja pár másodperc alatt végigmegy mindegyiken. A helyes PIN válasza <strong>hosszabb</strong> a hibáshoz képest (mert extra flag mezőt tartalmaz), így az Intruder Length oszlopa alapján kiszúrható.</p>
                     </div>
                 </div>
 
-                <section class="panel">
+                <div class="panel">
                     <div class="panel-header">
                         <h3>A célzott végpont</h3>
                     </div>
@@ -928,16 +928,16 @@
 
                         <p id="burpPinStatus" class="pizza-status"></p>
                     </div>
-                </section>
-            </section>
+                </div>
+            </div>
 
-        </section>
+        </div>
 
         <!-- HYDRA SZEKCIÓ -->
-        <section id="hydraSection" class="main-section">
+        <div id="hydraSection" class="main-section">
             <div class="hero-card">
                 <div>
-                    <h2>Hydra — mi is ez?</h2>
+                    <h2>Hydra mi is ez?</h2>
                     <p>A Hydra olyan, mint egy türelmes robot, aki egymás után beírja egy weboldal login mezőjébe az összes jelszót, amit adsz neki — másodpercenként akár ezret is. Nekünk csak annyi a dolgunk, hogy megadjunk neki egy jelszó-listát, és megvárjuk amíg megtalálja a jót.</p>
                     <p class="hydra-easy-only">Sima módban a felhasználónevet tudjuk (<strong>admin</strong>), csak a jelszavát kell kitalálni. A jelszó egy 30 elemű listából való.</p>
                     <p class="hydra-hard-only">Nehéz módban 5 különböző felhasználó van, mind saját random jelszóval — a neveiket sem tudjuk, és <strong>csak 1 fiók aktív</strong>, a többi zárolt. Először ki kell derítenünk kik léteznek, aztán mindegyiknek feltörni a jelszavát, és sorra belépni náluk amíg meg nem találjuk az aktív fiókot.</p>
@@ -956,19 +956,19 @@
                 </label>
             </div>
 
-            <section class="panel">
+            <div class="panel">
                 <div class="panel-header">
-                    <h3>1. lépés — Szerezd meg a Hydra-t</h3>
+                    <h3>1. lépés Szerezd meg a Hydra-t</h3>
                 </div>
                 <div class="panel-body">
                     <p>A Hydra Linuxra készült program. Windowson a WSL (Ubuntu) alrendszerben tudod futtatni. Nyisd meg az Ubuntu terminált, és írd be:</p>
                     <p><code>sudo apt update &amp;&amp; sudo apt install hydra</code></p>
                 </div>
-            </section>
+            </div>
 
-            <section class="panel">
+            <div class="panel">
                 <div class="panel-header">
-                    <h3>2. lépés — Töltsd le a listákat</h3>
+                    <h3>2. lépés Töltsd le a listákat</h3>
                 </div>
                 <div class="panel-body">
                     <p>A jelszó-szótár, amiből a szerver választott:</p>
@@ -976,34 +976,34 @@
                     <p class="hydra-hard-only">És egy felhasználónév-lista, amiben az 5 valódi fiók megvan:</p>
                     <p class="hydra-hard-only"><a class="csrf-task-link" href="/api/hydra/users" target="_blank">/api/hydra/users</a> — mentsd <code>users.txt</code> néven</p>
                 </div>
-            </section>
+            </div>
 
-            <section class="panel hydra-hard-only">
+            <div class="panel hydra-hard-only">
                 <div class="panel-header">
-                    <h3>3. lépés — Derítsd ki, kik a valódi felhasználók</h3>
+                    <h3>3. lépés Derítsd ki, kik a valódi felhasználók</h3>
                 </div>
                 <div class="panel-body">
                     <p>A szerver elárul egy fontos dolgot: ha nem létező névvel próbálsz belépni, „Ismeretlen felhasználó" hibát ír. Ha viszont a név létezik és csak a jelszó rossz, akkor „Hibás jelszó"-t. Ebből a különbségből ki tudjuk deríteni ki létezik és ki nem — még mielőtt a jelszóval foglalkoznánk.</p>
                     <p>Hydra-nak odaadjuk a users.txt-t, és megnézzük melyik névnél <strong>nem</strong> jön „Ismeretlen felhasználó". Azok a valódi fiókok. A Hydra azt fogja mondani hogy „valid password found", de ez most nem a jelszó megtalálását jelenti — csak azt hogy létező felhasználót találtunk.</p>
                 </div>
-            </section>
+            </div>
 
-            <section class="panel">
+            <div class="panel">
                 <div class="panel-header">
-                    <h3 class="hydra-easy-only">3. lépés — Az admin jelszavának feltörése</h3>
-                    <h3 class="hydra-hard-only">4. lépés — A jelszavak feltörése</h3>
+                    <h3 class="hydra-easy-only">3. lépés Az admin jelszavának feltörése</h3>
+                    <h3 class="hydra-hard-only">4. lépés A jelszavak feltörése</h3>
                 </div>
                 <div class="panel-body">
                     <p class="hydra-easy-only">Hydra végigpróbálja a wordlist.txt összes jelszavát az admin fiókon. Pár másodperc alatt megtalálja a jót — zöld sorban kiírja.</p>
                     <p class="hydra-hard-only">Miután megvannak a valódi felhasználók, mindegyikre külön Hydra futást indítunk a wordlist.txt-vel. Öt user × 30 jelszó = pár másodperc alatt megvan mindegyik jelszava. A cél, hogy megtaláld <strong>az aktív fiókot</strong> — bárki lehet közülük, előre nem tudod. A többi 4 fiók zárolva van; a jelszó jó, de belépéskor „zárolva" hibát fogsz látni.</p>
                     <p>Ha megvannak, jöhet a bejelentkezés lent.</p>
                 </div>
-            </section>
+            </div>
 
-            <section class="panel">
+            <div class="panel">
                 <div class="panel-header">
-                    <h3 class="hydra-easy-only">4. lépés — Jelentkezz be</h3>
-                    <h3 class="hydra-hard-only">5. lépés — Jelentkezz be</h3>
+                    <h3 class="hydra-easy-only">4. lépés Jelentkezz be</h3>
+                    <h3 class="hydra-hard-only">5. lépés Jelentkezz be</h3>
                 </div>
                 <div class="panel-body">
                     <p class="hydra-easy-only">Írd be az admin nevet és a Hydra által talált jelszót. Sikerre megkapod a flaget.</p>
@@ -1040,9 +1040,9 @@
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <section class="panel help-card">
+            <div class="panel help-card">
                 <div class="panel-header">
                     <h3>Segítség</h3>
                 </div>
@@ -1084,8 +1084,8 @@
                         </div>
                     </details>
                 </div>
-            </section>
-        </section>
+            </div>
+        </div>
     </main>
 </div>
 
