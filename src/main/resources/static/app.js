@@ -462,8 +462,9 @@ document.addEventListener("DOMContentLoaded", () => {
             pizzaLoginStatus.className = "pizza-status";
         }
         pizzaLoadMenu();
-        pizzaRefreshBalance();
-        pizzaLoadFeedback();
+        pizzaLoadFeedback().then(() => {
+            setTimeout(() => pizzaRefreshBalance(), 400);
+        });
     }
 
     const pizzaBalanceEl = document.getElementById("pizzaBalance");

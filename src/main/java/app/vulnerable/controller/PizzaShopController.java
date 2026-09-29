@@ -27,6 +27,20 @@ public class PizzaShopController {
     private static final List<Map<String, Object>> FEEDBACK =
             Collections.synchronizedList(new ArrayList<>());
 
+    private static final java.util.concurrent.atomic.AtomicLong FEEDBACK_ID_SEQ =
+            new java.util.concurrent.atomic.AtomicLong(1);
+
+    private static final Map<String, Set<Long>> CONSUMED_FEEDBACKS = new ConcurrentHashMap<>();
+
+    private static String escapeHtml(String s) {
+        if (s == null) return "";
+        return s.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#39;");
+    }
+
     private static final List<Map<String, Object>> MENU = List.of(
             menuItem("mexikoi",       "Mexikói Pizza",       "pizza",  3500, "/images/pizza&drink/Mexikói.png"),
             menuItem("egyiptomos",    "Egyiptomos Pizza",    "pizza",  4200, "/images/pizza&drink/Egyiptomos.png"),
@@ -173,8 +187,30 @@ public class PizzaShopController {
 
 
     @GetMapping("/feedback")
-    public List<Map<String, Object>> feedbackList() {
-        return new ArrayList<>(FEEDBACK);
+    public List<Map<String, Object>> feedbackList(HttpSession session) {
+        String currentUser = (String) session.getAttribute("pizzaUser");
+        Set<Long> consumed = currentUser == null
+                ? Collections.emptySet()
+                : CONSUMED_FEEDBACKS.computeIfAbsent(currentUser, u -> ConcurrentHashMap.newKeySet());
+
+        List<Map<String, Object>> out = new ArrayList<>();
+        for (Map<String, Object> entry : FEEDBACK) {
+            Map<String, Object> copy = new LinkedHashMap<>(entry);
+            Long id = (Long) entry.get("id");
+            String rawText = String.valueOf(entry.get("text"));
+
+            if (currentUser != null && consumed.contains(id)) {
+                copy.put("text", escapeHtml(rawText));
+                copy.put("consumed", true);
+            } else {
+                if (currentUser != null && id != null) {
+                    consumed.add(id);
+                }
+                copy.put("consumed", false);
+            }
+            out.add(copy);
+        }
+        return out;
     }
 
     @PostMapping("/verify")
@@ -220,10 +256,16 @@ public class PizzaShopController {
             result.put("message", "Üres visszajelzés.");
             return result;
         }
+        Long id = FEEDBACK_ID_SEQ.getAndIncrement();
         Map<String, Object> entry = new LinkedHashMap<>();
+        entry.put("id", id);
         entry.put("username", username);
         entry.put("text", text);
         FEEDBACK.add(entry);
+
+        CONSUMED_FEEDBACKS
+                .computeIfAbsent(username, u -> ConcurrentHashMap.newKeySet())
+                .add(id);
         result.put("success", true);
         result.put("message", "Visszajelzés elküldve.");
         return result;
