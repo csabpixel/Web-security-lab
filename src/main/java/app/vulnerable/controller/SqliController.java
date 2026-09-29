@@ -132,7 +132,7 @@ public class SqliController {
             response.put("user", user);
             String role = String.valueOf(row[2]);
             String message = "ADMIN".equalsIgnoreCase(role)
-                    ? "🎉 Sikeres belépés ADMIN-ként! A feladat teljesítve."
+                    ? "Sikeres belépés ADMIN-ként! A feladat teljesítve."
                     : "Sikeres belépés " + role + " jogosultsággal.";
             response.put("message", message);
         }
